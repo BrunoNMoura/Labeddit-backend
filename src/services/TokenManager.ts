@@ -1,12 +1,6 @@
 import jwt from "jsonwebtoken";
-//import { USER_ROLES } from "../models/User";
+import { TokenPayload } from "../models/User";
 
-
-export interface TokenPayload {
-    id:string,
-    name:string;
-   // role:USER_ROLES;
-}
 export class TokenManager {
     public createToken = (payload:TokenPayload) =>{
         const token = jwt.sign(payload, process.env.JWT_KEY as string, {
