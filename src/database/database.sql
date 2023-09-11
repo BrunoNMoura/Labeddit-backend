@@ -78,3 +78,37 @@ VALUES (
         'p002',
         0
     );
+
+    CREATE TABLE
+    coments (
+        id TEXT PRIMARY KEY UNIQUE NOT NULL,
+        post_id TEXT NOT NULL,
+        content TEXT NOT NULL,
+        likes INTEGER,
+        dislikes INTEGER,
+        created_at TEXT DEFAULT (DATETIME()) NOT NULL,
+        updated_at TEXT DEFAULT (DATETIME()) NOT NULL,
+        FOREIGN KEY (post_id) REFERENCES posts(id)
+    );
+
+    INSERT INTO
+    coments (
+        id,
+        post_id,
+        content,
+        likes,
+        dislikes
+    )
+VALUES (
+        'c001',
+        'p001',
+        'Eu vive para ver o Bruno aprendendo alguma coisa de programção.kkkk',
+        0,
+        0
+    ),(
+        'c002',
+        'p002',
+        'Realmente ele compreendeu um pouco de programação!Estou adimirado cada dia mais com sua evolução!',
+        0,
+        0
+    );
