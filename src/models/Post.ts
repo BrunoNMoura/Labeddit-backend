@@ -3,8 +3,9 @@ export interface PostDB {
     creator_id: string;
     content: string;
     likes: number;
-    dislikes: number;
+    dislikes: number;  
     created_at: string;
+    comments:number;
     updated_at: string;
   }
   export interface PostDBWithCreatorName {
@@ -13,15 +14,24 @@ export interface PostDB {
     content: string;
     likes: number;
     dislikes: number;
+    comments:number;
     created_at: string;
     updated_at: string;
     creator_name: string;
   }
+
+  export interface PostUpdateDB {
+    id: string
+    content: string
+    updated_at: string 
+  }
+
   export interface PostModel {
     id: string;
     content: string;
     likes: number;
     dislikes: number;
+    comments:number;
     createdAt: string;
     updatedAt: string;
     creator: {
@@ -44,6 +54,7 @@ export interface PostDB {
       private content: string,
       private likes: number,
       private dislikes: number,
+      private comments:number,
       private createdAt: string,
       private updatedAt: string,
       private creatorId: string,
@@ -85,6 +96,18 @@ export interface PostDB {
     public removeDislike = (): void => {
       this.dislikes--;
     };
+    public getComments(): number {
+      return this.comments;
+    }
+    public setComments(value: number): void {
+      this.comments = value;
+    }
+    public addComments = (): void => {
+      this.comments++;
+    };
+    public removeComments = (): void => {
+      this.comments--;
+    };
     public getCreatedAt(): string {
       return this.createdAt;
     }
@@ -116,6 +139,7 @@ export interface PostDB {
         content: this.content,
         likes: this.likes,
         dislikes: this.dislikes,
+        comments: this.comments,
         created_at: this.createdAt,
         updated_at: this.updatedAt,
       };
@@ -126,6 +150,7 @@ export interface PostDB {
         content: this.content,
         likes: this.likes,
         dislikes: this.dislikes,
+        comments:this.comments,
         createdAt: this.createdAt,
         updatedAt: this.updatedAt,
         creator: {
