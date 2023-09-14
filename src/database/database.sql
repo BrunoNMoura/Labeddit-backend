@@ -33,6 +33,7 @@ CREATE TABLE
         content TEXT NOT NULL,
         likes INTEGER,
         dislikes INTEGER,
+        comments INTEGER,
         created_at TEXT DEFAULT (DATETIME()) NOT NULL,
         updated_at TEXT DEFAULT (DATETIME()) NOT NULL,
         FOREIGN KEY (creator_id) REFERENCES users(id)
@@ -44,12 +45,14 @@ INSERT INTO
         creator_id,
         content,
         likes,
-        dislikes
+        dislikes,
+        comments
     )
 VALUES (
         'p001',
         'u001',
         'Fala galera, quem diria que ia ver o Bruno aprendendo alguma coisa de programção.kkkk',
+        0,
         0,
         0
     ),(
@@ -57,58 +60,74 @@ VALUES (
         'u002',
         'Fala galera, quem diria que ia comprender um pouco de programação!Estou aprandendo cada dia mais!',
         0,
+        0,
         0
-    );
+    );  
+
+    DROP TABLE comments;
 
     CREATE TABLE
-    likes_deslikes (
-        user_id TEXT NOT NULL,
-        post_id TEXT NOT NULL,
-        like INTEGER NOT NULL,
-        FOREIGN KEY (user_id) REFERENCES users(id),
-        FOREIGN KEY (post_id) REFERENCES posts(id)
-    );
-    INSERT INTO likes_deslikes (user_id, post_id, like)
-    VALUES (
-        'u001',
-        'p001',
-        0
-    ),(
-        'u002',
-        'p002',
-        0
-    );
-
-    CREATE TABLE
-    coments (
+    comments (
         id TEXT PRIMARY KEY UNIQUE NOT NULL,
         post_id TEXT NOT NULL,
+        creator_id TEXT NOT NULL,
         content TEXT NOT NULL,
         likes INTEGER,
         dislikes INTEGER,
+        comments INTEGER,
         created_at TEXT DEFAULT (DATETIME()) NOT NULL,
         updated_at TEXT DEFAULT (DATETIME()) NOT NULL,
         FOREIGN KEY (post_id) REFERENCES posts(id)
+        FOREIGN KEY (creator_id) REFERENCES users(id)
     );
 
     INSERT INTO
-    coments (
+    comments (
         id,
         post_id,
+        creator_id,
         content,
         likes,
-        dislikes
+        dislikes,
+        comments
     )
 VALUES (
         'c001',
         'p001',
+        'u001',
         'Eu vive para ver o Bruno aprendendo alguma coisa de programção.kkkk',
+        0,
         0,
         0
     ),(
         'c002',
         'p002',
+        'u002',
         'Realmente ele compreendeu um pouco de programação!Estou adimirado cada dia mais com sua evolução!',
         0,
+        0,
+        0
+    );
+
+     CREATE TABLE
+    likes_deslikes (
+        user_id TEXT NOT NULL,
+        post_id TEXT NOT NULL,
+        comment_id TEXT NOT NULL,
+        like INTEGER NOT NULL,
+        FOREIGN KEY (user_id) REFERENCES users(id),
+        FOREIGN KEY (post_id) REFERENCES posts(id),
+        FOREIGN KEY (comment_id) REFERENCES comments(id)
+    );
+    INSERT INTO likes_deslikes (user_id, post_id, comment_id, like)
+    VALUES (
+        'u001',
+        'p001',
+        'c001',
+        0
+    ),(
+        'u002',
+        'p002',
+        'c002',
         0
     );
