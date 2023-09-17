@@ -1,15 +1,9 @@
-import {
-  LikesDislikesDB,
-  POST_LIKE,
-  PostDB,
-  PostDBWithCreatorName,
-} from "../models/Post";
+import { PostDB, PostDBWithCreatorName } from "../models/Post";
 import { BaseDatabase } from "./BaseDatabase";
 import { UserDatabase } from "./UserDatabase";
 
 export class PostDatabase extends BaseDatabase {
   public static TABLE_POSTS = "posts";
-  public static TABLE_LIKES_DISLIKES = "likes_deslikes";
 
   public getPost = async (): Promise<PostDBWithCreatorName[]> => {
     const output: PostDBWithCreatorName[] = await BaseDatabase.connection(
@@ -75,50 +69,4 @@ export class PostDatabase extends BaseDatabase {
 
     return result as PostDBWithCreatorName | undefined;
   };
-  public findLikeDislike = async (
-    likeDislikeDB: LikesDislikesDB
-  ): Promise<POST_LIKE | undefined> => {
-    const [result]: Array<LikesDislikesDB | undefined> =
-      await BaseDatabase.connection(PostDatabase.TABLE_LIKES_DISLIKES)
-        .select()
-        .where({
-          user_id: likeDislikeDB.user_id,
-          post_id: likeDislikeDB.post_id,
-        });
-
-    if (result === undefined) {
-      return undefined;
-    } else if (result.like === 1) {
-      return POST_LIKE.ALREADY_LIKED;
-    } else {
-      return POST_LIKE.ALREADY_DISLIKED;
-    }
-  };
-  public removeLikeDislike = async (
-    likeDislikeDB: LikesDislikesDB
-  ): Promise<void> => {
-    await BaseDatabase.connection(PostDatabase.TABLE_LIKES_DISLIKES)
-      .delete()
-      .where({
-        user_id: likeDislikeDB.user_id,
-        post_id: likeDislikeDB.post_id,
-      });
-  };
-  public updateLikeDislike = async (
-    likeDislikeDB: LikesDislikesDB
-  ): Promise<void> => {
-    await BaseDatabase.connection(PostDatabase.TABLE_LIKES_DISLIKES)
-      .update(likeDislikeDB)
-      .where({
-        user_id: likeDislikeDB.user_id,
-        post_id: likeDislikeDB.post_id,
-      });
-  };
-  public insertLikeDislike = async (
-    likeDislikeDB: LikesDislikesDB
-  ): Promise<void> => {
-    await BaseDatabase.connection(PostDatabase.TABLE_LIKES_DISLIKES).insert(
-      likeDislikeDB
-    );
-  }; 
 }
