@@ -64,7 +64,7 @@ VALUES (
         0
     );  
 
-    DROP TABLE comments;
+    DROP TABLE  posts;
 
     CREATE TABLE
     comments (
@@ -112,22 +112,17 @@ VALUES (
      CREATE TABLE
     likes_deslikes (
         user_id TEXT NOT NULL,
-        post_id TEXT NOT NULL,
-        comment_id TEXT NOT NULL,
+        action_id TEXT NOT NULL,
         like INTEGER NOT NULL,
-        FOREIGN KEY (user_id) REFERENCES users(id),
-        FOREIGN KEY (post_id) REFERENCES posts(id),
-        FOREIGN KEY (comment_id) REFERENCES comments(id)
+        FOREIGN KEY (user_id) REFERENCES users(id)
     );
-    INSERT INTO likes_deslikes (user_id, post_id, comment_id, like)
+    INSERT INTO likes_deslikes (user_id, action_id, like)
     VALUES (
         'u001',
-        'p001',
-        'c001',
+        'a001',
         0
     ),(
         'u002',
-        'p002',
-        'c002',
+        'a002',
         0
     );
