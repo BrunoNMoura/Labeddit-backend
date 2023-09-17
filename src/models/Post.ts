@@ -20,6 +20,17 @@ export interface PostDB {
     creator_name: string;
   }
 
+  export enum POST_ACTION {
+    POST = "posts",
+    COMMENT = "comments"
+  }
+  
+  export enum LIKED {
+    LIKE = "like",
+    DISLIKE = "dislike",
+    NOLIKED = "no"
+  }
+
   export interface PostUpdateDB {
     id: string
     content: string
