@@ -22,7 +22,7 @@ export class LikeDislikeBusiness {
     // validação token 
     const payLoad = this.tokenManager.getPayload(token)
     if (payLoad == undefined) {
-      throw new BadRequestError("token inválido")
+      throw new BadRequestError("invalid token")
     }
 
     // pega o id do usuário 
@@ -44,12 +44,12 @@ export class LikeDislikeBusiness {
     }
 
     if (postComment === undefined) {
-      throw new NotFoundError("'id' não encontrado")
+      throw new NotFoundError("'id' not afound")
     }
 
     // Verifica se o post/comment é do mesmo usuário
     if (postComment.creator_id === userId) {
-      throw new BadRequestError("ação inválida: você não pode dar like ou dislike no seu próprio post/comentário")
+      throw new BadRequestError("invalid action: you cannot like or dislike your own post/comment")
     }
 
     // pesquisa se ( likes_dislikes ) se existe registro: User x Post
