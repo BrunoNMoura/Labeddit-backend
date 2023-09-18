@@ -30,6 +30,11 @@ export interface PostDB {
     DISLIKE = "dislike",
     NOLIKED = "no"
   }
+  export interface LikesDislikesDB {
+    action_id: string
+    user_id: string
+    like: number
+  }
 
   export interface PostUpdateDB {
     id: string
