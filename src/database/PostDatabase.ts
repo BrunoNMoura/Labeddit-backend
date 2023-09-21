@@ -1,72 +1,45 @@
-import { PostDB, PostDBWithCreatorName } from "../models/Post";
-import { BaseDatabase } from "./BaseDatabase";
-import { UserDatabase } from "./UserDatabase";
+import { PostDB, PostResultDB, PostUpdateDB } from "../models/Post";
+import { BaseDataBase } from "./BaseDatabase";
 
-export class PostDatabase extends BaseDatabase {
-  public static TABLE_POSTS = "posts";
+export class PostDatabase extends BaseDataBase {
+  TABLE_NAME = "posts";
 
-  public getPost = async (): Promise<PostDBWithCreatorName[]> => {
-    const output: PostDBWithCreatorName[] = await BaseDatabase.connection(
-      PostDatabase.TABLE_POSTS
-    )
-      .select(
-        `${PostDatabase.TABLE_POSTS}.id`,
-        `${PostDatabase.TABLE_POSTS}.content`,
-        `${PostDatabase.TABLE_POSTS}.likes`,
-        `${PostDatabase.TABLE_POSTS}.dislikes`,
-        `${PostDatabase.TABLE_POSTS}.created_at`,
-        `${PostDatabase.TABLE_POSTS}.updated_at`,
-        `${PostDatabase.TABLE_POSTS}.creator_id`,
-        `${UserDatabase.TABLE_USERS}.name as creator_name`
-      )
-      .innerJoin(
-        `${UserDatabase.TABLE_USERS}`,
-        `${PostDatabase.TABLE_POSTS}.creator_id`,
-        "=",
-        `${UserDatabase.TABLE_USERS}.id`
-      );
-    return output;
-  };
-  public findPostById = async (id: string) => {
-    const [result] = await BaseDatabase.connection(PostDatabase.TABLE_POSTS)
-      .select()
-      .where({ id });
-
-    return result as PostDB | undefined;
-  };
   public insertPost = async (newPost: PostDB): Promise<void> => {
-    await BaseDatabase.connection(PostDatabase.TABLE_POSTS).insert(newPost);
+    await BaseDataBase.connection(this.TABLE_NAME).insert(newPost);
   };
-  public updatePost = async (updatePost: PostDB): Promise<void> => {
-    await BaseDatabase.connection(PostDatabase.TABLE_POSTS)
-      .update(updatePost)
-      .where({ id: updatePost.id });
-  };
-  public deletePost = async (id: string): Promise<void> => {
-    await BaseDatabase.connection(PostDatabase.TABLE_POSTS).del().where({ id });
-  };
-  public findPostWithCreatorNameById = async (
-    id: string
-  ): Promise<PostDBWithCreatorName | undefined> => {
-    const [result] = await BaseDatabase.connection(PostDatabase.TABLE_POSTS)
-      .select(
-        `${PostDatabase.TABLE_POSTS}.id`,
-        `${PostDatabase.TABLE_POSTS}.creator_id`,
-        `${PostDatabase.TABLE_POSTS}.content`,
-        `${PostDatabase.TABLE_POSTS}.likes`,
-        `${PostDatabase.TABLE_POSTS}.dislikes`,
-        `${PostDatabase.TABLE_POSTS}.created_at`,
-        `${PostDatabase.TABLE_POSTS}.updated_at`,
-        `${UserDatabase.TABLE_USERS}.name as creator_name`
-      )
-      .join(
-        `${UserDatabase.TABLE_USERS}`,
-        `${PostDatabase.TABLE_POSTS}.creator_id`,
-        "=",
-        `${UserDatabase.TABLE_USERS}.id`
-      )
-      .where({ [`${PostDatabase.TABLE_POSTS}.id`]: id });
 
-    return result as PostDBWithCreatorName | undefined;
+  public updatePost = async (
+    updatePost: PostUpdateDB,
+    creatorId: string
+  ): Promise<void> => {
+    await BaseDataBase.connection(this.TABLE_NAME)
+      .update(updatePost)
+      .where("id", "=", updatePost.id)
+      .andWhere("creator_id", "=", creatorId);
+  };
+
+  public deletePost = async (postId: string): Promise<void> => {
+    await BaseDataBase.connection(this.TABLE_NAME).del().where({ id: postId });
+    await BaseDataBase.connection("likes_dislikes")
+      .del()
+      .where({ action_id: postId });
+  };
+
+  public getPost = async (): Promise<PostResultDB[]> => {
+    const response = await BaseDataBase.connection("posts as p")
+      .select(
+        "p.id",
+        "p.content",
+        "p.likes",
+        "p.dislikes",
+        "p.comments",
+        "p.created_at",
+        "p.updated_at",
+        "p.creator_id",
+        "u.name as creator_name"
+      )
+      .leftJoin("users as u", "p.creator_id", "u.id")
+      .orderBy("p.updated_at", "desc");
+    return response;
   };
 }
