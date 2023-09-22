@@ -1,15 +1,13 @@
 import z from "zod"
 
 export interface CreateCommentInputDTO {
-    postId: string,
+    commentId: string,
     content: string,
     token: string 
 }
-export interface CreateCommentOutputDTO{
-  message:string
-}
-export const CreatePostSchema = z.object({
-    postId: z.string(
+
+export const CreateCommentSchema = z.object({
+    commentId: z.string(
         {
           required_error: "'id' is required",
           invalid_type_error: "'id' must be a string"
