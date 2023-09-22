@@ -1,6 +1,9 @@
+import { LIKED } from "./Post";
+
 export interface CommentDB {
   id: string;
   post_id: string;
+  parental_post_id: string
   creator_id: string;
   content: string;
   likes: number;
@@ -17,21 +20,24 @@ export interface CommentUpdateDB {
 }
 
 export interface CommentModel {
-  id: string;
-  content: string;
-  postId: string;
-  likes: number;
-  dislikes: number;
-  comments: number;
+  id: string,  
+  content: string,
+  postId: string,
+  parentalPostId: string,
+  likes: number,
+  dislikes: number,  
+  comments: number,
   creator: {
-    id: string;
-    name: string;
-  };
+    id: string,
+    name: string
+  },
+  liked: LIKED
 }
 
 export interface CommentResultDB {
   id: string;
   post_id: string;
+  parental_post_id: string;
   content: string;
   likes: number;
   dislikes: number;
