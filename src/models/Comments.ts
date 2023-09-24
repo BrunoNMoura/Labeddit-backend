@@ -14,7 +14,7 @@ export interface CommentDB {
 }
 
 export interface CommentUpdateDB {
-  id: string;
+  idToEdit: string;
   content: string;
   updated_at: string;
 }

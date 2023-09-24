@@ -1,40 +1,39 @@
 import { UserDB } from "../models/User"
-import { BaseDatabase } from "./BaseDatabase"
+import { BaseDataBase } from "./BaseDatabase"
 
-export class UserDatabase extends BaseDatabase{
+export class UserDataBase extends BaseDataBase{
 
     public static TABLE_USERS = "users"
-
 
 public async findUserByEmail(
     email:string
 ): Promise<UserDB | undefined>{
-    const [userDB]:UserDB[] | undefined[] = await BaseDatabase
-    .connection(UserDatabase.TABLE_USERS)
+    const [userDB]:UserDB[] | undefined[] = await BaseDataBase
+    .connection(UserDataBase.TABLE_USERS)
     .where({email})
 
     return userDB   
 }
 public async findById(id: string): Promise<any> {
-    return await BaseDatabase.connection(UserDatabase.TABLE_USERS).where({ id })
+    return await BaseDataBase.connection(UserDataBase.TABLE_USERS).where({ id })
 }
 public async insertUser(
     newUserDB: UserDB
 ): Promise<void> {
-    await BaseDatabase
-    .connection(UserDatabase.TABLE_USERS)
+    await BaseDataBase
+    .connection(UserDataBase.TABLE_USERS)
     .insert(newUserDB)
 }
 public getUser = async (q:string):Promise<UserDB[]> =>{
     let resultDB: UserDB[]
     if(q){
-      resultDB = await BaseDatabase
-      .connection(UserDatabase.TABLE_USERS).where("name", "like", `%${q}%`)
+      resultDB = await BaseDataBase
+      .connection(UserDataBase.TABLE_USERS).where("name", "like", `%${q}%`)
     } else {
-      resultDB = await BaseDatabase
-      .connection(UserDatabase.TABLE_USERS)
+      resultDB = await BaseDataBase
+      .connection(UserDataBase.TABLE_USERS)
     }
         
     return resultDB
-  } 
+  }   
 }

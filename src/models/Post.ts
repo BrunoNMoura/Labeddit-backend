@@ -1,4 +1,3 @@
-// INSERT  DO POST
 export interface PostDB {
   id: string,  
   creator_id: string,
@@ -10,14 +9,12 @@ export interface PostDB {
   updated_at: string 
 }
 
-// UPDATE DO POST
 export interface PostUpdateDB {
-  id: string
+  idToEdit: string
   content: string
   updated_at: string 
 }
 
-// POSTS  USERS
 export interface PostResultDB {
   id: string,  
   content: string,
@@ -30,7 +27,6 @@ export interface PostResultDB {
   creator_name: string
 }
 
-// LIKES_DISLIKES
 export interface LikesDislikesDB {
   action_id: string
   user_id: string

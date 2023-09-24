@@ -15,14 +15,7 @@ const postController = new PostController
       new TokenManager())      
   )
 
-//=================== CREATE POST
 postRouter.post("/",postController.createPost)
-
-//================== GET POSTS
 postRouter.get("/",postController.getPost)
-
-//================== EDIT POST
 postRouter.put("/:id",postController.editPost)
-
-//================== DELETE POST
 postRouter.delete("/:id",postController.deletePost)

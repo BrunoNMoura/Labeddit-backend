@@ -1,47 +1,50 @@
 import { CommentDB, CommentResultDB, CommentUpdateDB } from "../models/Comments";
 import { BaseDataBase } from "./BaseDatabase";
+import { LikeDislikeDatabase } from "./LikeDislikeDatabase";
+import { PostDatabase } from "./PostDatabase";
+import { UserDataBase } from "./UserDatabase";
 
 export class CommentDataBase extends BaseDataBase {
 
-  TABLE_NAME = "comments"
+  public static TABLE_COMMENS  = "comments"
 
   public getComment = async (postId: string): Promise<CommentResultDB[]> => {
 
-    const output: CommentResultDB[] = await BaseDataBase.connection("comments as c")
+    const output: CommentResultDB[] = await BaseDataBase.connection(`${CommentDataBase.TABLE_COMMENS} as c`)
       .select("c.id", "c.post_id", "c.content", "c.likes", "c.dislikes",
         "c.comments", "c.creator_id", "u.name as creator_name")
-      .innerJoin("users as u", "c.creator_id", "u.id")
+      .innerJoin(`${UserDataBase.TABLE_USERS} as u`, "c.creator_id", "u.id")
       .where({ post_id: postId })
     return output
   }
 
   public insertComment = async (newComment: CommentDB): Promise<void> => {
-    await BaseDataBase.connection(this.TABLE_NAME).insert(newComment)
+    await BaseDataBase.connection(CommentDataBase.TABLE_COMMENS).insert(newComment)
   }
 
   public updateComment = async (updateComment: CommentUpdateDB, creatorId: string): Promise<void> => {
-    await BaseDataBase.connection(this.TABLE_NAME)
+    await BaseDataBase.connection(CommentDataBase.TABLE_COMMENS)
       .update(updateComment)
-      .where("id", "=", updateComment.id)
+      .where("id", "=", updateComment.idToEdit)
       .andWhere("creator_id", "=", creatorId)
   }
 
   public deleteComment = async (commentId: string): Promise<void> => {
-    await BaseDataBase.connection(this.TABLE_NAME)
+    await BaseDataBase.connection(CommentDataBase.TABLE_COMMENS)
       .del().where("id", "=", commentId)
-    await BaseDataBase.connection("likes_dislikes")
+    await BaseDataBase.connection(LikeDislikeDatabase.TABLE_LIKES_DISLIKES)
       .del().where({ action_id: commentId })
   }
 
   public incrementComments = async (postId: string): Promise<void> => {
-    await BaseDataBase.connection("posts")
+    await BaseDataBase.connection(PostDatabase.TABLE_POSTS)
       .where({ id: postId })
-      .increment("comments")
+      .increment(PostDatabase.TABLE_POSTS)
   }
 
   public decrementComments = async (postId: string): Promise<void> => {
-    await BaseDataBase.connection("posts")
+    await BaseDataBase.connection(PostDatabase.TABLE_POSTS)
       .where({ id: postId })
-      .decrement("comments")
+      .decrement(PostDatabase.TABLE_POSTS)
   }
 }

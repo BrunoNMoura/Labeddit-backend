@@ -57,15 +57,15 @@ export class CommentBusiness {
   }
 
   public createComment = async (input: CreateCommentInputDTO): Promise<string> => {
-    const { commentId, content, token } = input;
+    const { postId, content, token } = input;
 
-    const payLoad = this.tokenManager.getPayload(token);
-    if (payLoad == null) {
-      throw new BadRequestError("Invalid token");
+    const payload = this.tokenManager.getPayload(token);
+    if (payload == undefined) {
+      throw new BadRequestError("invalid token");
     }
-    const { id: creatorId } = payLoad;
+    const { id: creatorId } = payload;
 
-    const [postDB] = await this.commentDataBase.findPost(commentId);
+    const [postDB] = await this.commentDataBase.findPost(postId);
 
     if (postDB == undefined) {
       throw new NotFoundError("Post not found");
@@ -75,7 +75,7 @@ export class CommentBusiness {
 
     const newComment: CommentDB = {
       id,
-      post_id: commentId,
+      post_id: postId,
       creator_id: creatorId,
       parental_post_id: "",
       content,
@@ -86,28 +86,28 @@ export class CommentBusiness {
       updated_at: new Date().toISOString(),
     };
     await this.commentDataBase.insertComment(newComment);
-    await this.commentDataBase.incrementComments(commentId);
+    await this.commentDataBase.incrementComments(postId);
 
     return "ok";
   }
 
-  public editComment = async (id: string, input: UpdateCommentInputDTO): Promise<string> => {
-    const { content, token } = input;
+  public editComment = async (input: UpdateCommentInputDTO): Promise<string> => {
+    const { content, token,idToEdit } = input;
 
-    const payLoad = this.tokenManager.getPayload(token);
-    if (payLoad == null) {
-      throw new BadRequestError("Invalid token");
+    const payload = this.tokenManager.getPayload(token);
+    if (!payload) {
+      throw new UnauthorizedError();
     }
 
-    const { id: creatorId } = payLoad;
+    const { id: creatorId } = payload;
 
     const updateComment: CommentUpdateDB = {
-      id,
+      idToEdit,
       content,
       updated_at: new Date().toISOString(),
     };
 
-    const [resultComment] = await this.commentDataBase.findComment(id);
+    const [resultComment] = await this.commentDataBase.findComment(idToEdit);
 
     if (!resultComment) {
       throw new NotFoundError("'id' not found");
@@ -117,23 +117,23 @@ export class CommentBusiness {
       throw new UnauthorizedError("Access denied");
     }
     await this.commentDataBase.updateComment(updateComment, creatorId);
-    return "ok";
+    return "update made";
   }
 
   public deleteComment = async (input: DeleteCommentInputDTO): Promise<string> => {
     const { idToDelete, token } = input;
 
-    const payLoad = this.tokenManager.getPayload(token);
-    if (payLoad == null) {
-      throw new BadRequestError("Invalid token");
+    const payload = this.tokenManager.getPayload(token);
+    if (!payload) {
+      throw new UnauthorizedError();
     }
 
-    const { id: creatorId, role } = payLoad;
+    const { id: creatorId, role } = payload;
 
     const [resultComment]: CommentDB[] = await this.commentDataBase.findComment(idToDelete);
 
     if (!resultComment) {
-      throw new NotFoundError("'id' not found");
+      throw new NotFoundError("comment with this id does not exist");
     }
 
     if (resultComment.creator_id != creatorId && role != USER_ROLES.ADMIN) {
@@ -142,7 +142,7 @@ export class CommentBusiness {
 
     await this.commentDataBase.deleteComment(idToDelete);
     await this.commentDataBase.decrementComments(resultComment.post_id);
-    return "ok";
+    return "deleted";
   }
 
   
