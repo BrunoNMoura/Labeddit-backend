@@ -24,8 +24,8 @@ export class PostBusiness {
     const { token } = input;
     const payload = this.tokenManager.getPayload(token);
 
-    if (payload == null) {
-      throw new BadRequestError("Invalid token");
+    if (!payload) {
+      throw new UnauthorizedError();
     }
 
     const resultDB = await this.postDataBase.getPost();
@@ -64,8 +64,8 @@ export class PostBusiness {
     const { content, token } = input;
 
     const payload = this.tokenManager.getPayload(token);
-    if (payload == null) {
-      throw new BadRequestError("Invalid token");
+    if (payload == undefined) {
+      throw new BadRequestError("invalid token");
     }
 
     const { id: creatorId } = payload;
@@ -89,25 +89,23 @@ export class PostBusiness {
   };
 
   public editPost = async (
-    id: string,
     input: UpdatePostInputDTO
   ): Promise<string> => {
-    const { content, token } = input;
+    const { content, token, idToEdit } = input;
 
     const payload = this.tokenManager.getPayload(token);
-    if (payload == null) {
-      throw new BadRequestError("Invalid token");
+    if (!payload) {
+      throw new UnauthorizedError();
     }
-
     const { id: creatorId } = payload;
 
     const updatePost: PostUpdateDB = {
-      id,
+      idToEdit,
       content,
       updated_at: new Date().toISOString(),
     };
 
-    const [resultPost] = await this.postDataBase.findPost(id);
+    const [resultPost] = await this.postDataBase.findPost(idToEdit);
 
     if (!resultPost) {
       throw new NotFoundError("'id' not found");
@@ -119,15 +117,15 @@ export class PostBusiness {
 
     await this.postDataBase.updatePost(updatePost, creatorId);
 
-    return "ok";
+    return "update made";
   };
 
   public deletePost = async (input: DeletePostInputDTO): Promise<string> => {
     const { token, idToDelete } = input;
 
     const payload = this.tokenManager.getPayload(token);
-    if (payload == null) {
-      throw new BadRequestError("Invalid token");
+    if (!payload) {
+      throw new UnauthorizedError();
     }
 
     const { id: creatorId, role } = payload;
@@ -135,7 +133,7 @@ export class PostBusiness {
     const [resultPost]: PostDB[] = await this.postDataBase.findPost(idToDelete);
 
     if (!resultPost) {
-      throw new NotFoundError("'id' not found");
+      throw new NotFoundError("post with this id does not exist");
     }
 
     if (resultPost.creator_id != creatorId && role != USER_ROLES.ADMIN) {
@@ -143,6 +141,6 @@ export class PostBusiness {
     }
 
     await this.postDataBase.deletePost(idToDelete);
-    return "ok";
+    return "deleted";
   };
 }

@@ -54,13 +54,13 @@ export class PostController {
 
   public editPost = async (req: Request, res: Response) => {
     try {
-      const id:string = req.params.id
       const input = UpdatePostSchema.parse({
         content: req.body.content,
         token: req.headers.authorization,
+        idToEdit: req.params.id
       });
 
-      const output = await this.postBusiness.editPost(id,input);
+      const output = await this.postBusiness.editPost(input);
 
       res.status(200).send(output);
     } catch (error) {

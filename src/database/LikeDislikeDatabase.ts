@@ -3,21 +3,21 @@ import { BaseDataBase } from "./BaseDatabase";
 
 export class LikeDislikeDatabase extends BaseDataBase {
 
-  TABLE_NAME = "likes_dislikes";
+  public static TABLE_LIKES_DISLIKES = "likes_deslikes"
 
   public insertLikeDislike = async (likeDislike: LikesDislikesDB): Promise<void> => {
-    await BaseDataBase.connection(this.TABLE_NAME).insert(likeDislike);
+    await BaseDataBase.connection(LikeDislikeDatabase.TABLE_LIKES_DISLIKES).insert(likeDislike);
   }
 
   public updateLikeDislike = async (likeDislike: LikesDislikesDB): Promise<void> => {
-    await BaseDataBase.connection(this.TABLE_NAME)
+    await BaseDataBase.connection(LikeDislikeDatabase.TABLE_LIKES_DISLIKES)
       .update({ like: likeDislike.like })
       .where({ user_id: likeDislike.user_id })
       .andWhere({ action_id: likeDislike.action_id });
   }
 
   public deleteLikeDislike = async (actionId: string, userId: string): Promise<void> => {
-    await BaseDataBase.connection("likes_dislikes")
+    await BaseDataBase.connection(LikeDislikeDatabase.TABLE_LIKES_DISLIKES)
       .del()
       .where({ action_id: actionId })
       .andWhere({ user_id: userId });

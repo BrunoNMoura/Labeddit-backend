@@ -40,9 +40,9 @@ export class CommentController {
         token: req.headers.authorization,
       });
 
-      const response = await this.commentBusiness.createComment(input);
+      const output = await this.commentBusiness.createComment(input);
 
-      res.status(200).send(response);
+      res.status(200).send(output);
     } catch (error) {
         console.log(error)
         if (error instanceof ZodError) {
@@ -57,16 +57,16 @@ export class CommentController {
 
   public editComment = async (req: Request, res: Response) => {
     try {
-      const id: string = req.params.id;
 
       const input = UpdateCommentSchema.parse({
         content: req.body.content,
         token: req.headers.authorization,
+        idToEdit: req.params.id
       });
 
-      const response = await this.commentBusiness.editComment(id, input);
+      const output = await this.commentBusiness.editComment(input);
 
-      res.status(200).send(response);
+      res.status(200).send(output);
     } catch (error) {
         console.log(error)
         if (error instanceof ZodError) {

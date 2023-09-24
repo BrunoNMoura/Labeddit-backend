@@ -4,9 +4,6 @@ export interface CreatePostInputDTO {
   content: string
   token: string 
 }
-export interface CreatePostOutputDTO{
-  message:string
-}
 export const CreatePostSchema = z.object({
   content: z.string(
     {

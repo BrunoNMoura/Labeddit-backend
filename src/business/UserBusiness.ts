@@ -1,4 +1,4 @@
-import { UserDatabase } from "../database/UserDatabase";
+import { UserDataBase } from "../database/UserDatabase";
 import { GetUsersInputDTO, GetUsersOutputDTO } from "../dtos/users/getUsers.dto";
 import { LoginInputDTO, LoginOutputDTO } from "../dtos/users/login.dto";
 import { SignupInputDTO, SignupOutputDTO } from "../dtos/users/signup.dto";
@@ -10,7 +10,7 @@ import { TokenManager } from "../services/TokenManager";
 
 export class UserBusiness {
   constructor(
-    private userDatabase: UserDatabase,
+    private userDatabase: UserDataBase,
     private idGenerator: IdGenerator,
     private tokenManager: TokenManager,
     private hashManager: HashManager
@@ -129,6 +129,6 @@ export class UserBusiness {
     }
 
     return output
-  }  
+  }   
 
 }
