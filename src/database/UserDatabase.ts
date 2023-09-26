@@ -24,7 +24,7 @@ public async insertUser(
     .connection(UserDataBase.TABLE_USERS)
     .insert(newUserDB)
 }
-public getUser = async (q:string):Promise<UserDB[]> =>{
+public findUsers = async (q:string):Promise<UserDB[]> =>{
     let resultDB: UserDB[]
     if(q){
       resultDB = await BaseDataBase
