@@ -1,12 +1,12 @@
+import { BaseDataBase } from "../../src/database/BaseDatabase";
 import { USER_ROLES, UserDB } from "../../src/models/User";
-import { BaseDataBase } from "../../src/database/BaseDataBase";
 
 const usersMock: UserDB[] = [
     {
       id: "id-mock-fulano",
       name: "Fulano",
       email: "fulano@email.com",
-      password: "hash-mock-fulano", // key = "fulano123"
+      password: "hash-mock-fulano", // key = "fulano123@"
       created_at: new Date().toISOString(),
       role: USER_ROLES.NORMAL
     },
@@ -14,13 +14,13 @@ const usersMock: UserDB[] = [
       id: "id-mock-astrodev",
       name: "Astrodev",
       email: "astrodev@email.com",
-      password: "hash-mock-astrodev", // key = "astrodev99"
+      password: "hash-mock-astrodev", // key = "astrodev99@"
       created_at: new Date().toISOString(),
       role: USER_ROLES.ADMIN
     },
   ]
   
-  export class UserDatabaseMock extends BaseDataBase {
+  export class UserDataBaseMock extends BaseDataBase {
     public static TABLE_USERS = "users"
   
     public async findUsers(
@@ -36,13 +36,13 @@ const usersMock: UserDB[] = [
       }
     }
   
-    public async findUserById(
+    public async findById(
       id: string
     ): Promise<UserDB | undefined> {
       return usersMock.filter(user => user.id === id)[0]
     }
   
-    public async findUserByEmail(
+    public async findByEmail(
       email: string
     ): Promise<UserDB | undefined> {
       return usersMock.filter(user => user.email === email)[0]

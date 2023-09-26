@@ -1,8 +1,8 @@
 import { CommentDB, CommentResultDB, CommentUpdateDB } from "../../src/models/Comments";
-import { BaseDataBase } from "../../src/database/BaseDataBase";
 import { LikesDislikesDB, PostDB } from "../../src/models/Post";
 import { postMock } from "./PostDataBase.Mock";
 import { liksMock } from "./LikesDislikesDataBase.Mock";
+import { BaseDataBase } from "../../src/database/BaseDatabase";
 
 export const commentMock = [
   {

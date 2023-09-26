@@ -42,17 +42,16 @@ export class UserBusiness {
       }
     })
     return output
-
   }
   
-  public singUp = async (input: SignupInputDTO): Promise<SignupOutputDTO> => {
+  public signUp = async (input: SignupInputDTO): Promise<SignupOutputDTO> => {
     const { name, email, password } = input;
 
     const id = this.idGenerator.generate();
 
     const hashedPassword = await this.hashManager.hash(password)
 
-    const userDBExists = await this.userDatabase.findUserByEmail(email);
+    const userDBExists = await this.userDatabase.findByEmail(email);
 
     if (userDBExists !== undefined) {
       throw new BadRequestError("'email' already registered")
@@ -91,7 +90,7 @@ export class UserBusiness {
   ): Promise<LoginOutputDTO> => {
     const { email, password } = input
 
-    const userDB = await this.userDatabase.findUserByEmail(email)
+    const userDB = await this.userDatabase.findByEmail(email)
 
     if (!userDB) {
       throw new BadRequestError("Invalid email")

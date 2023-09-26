@@ -5,7 +5,7 @@ export class UserDataBase extends BaseDataBase{
 
     public static TABLE_USERS = "users"
 
-public async findUserByEmail(
+public async findByEmail(
     email:string
 ): Promise<UserDB | undefined>{
     const [userDB]:UserDB[] | undefined[] = await BaseDataBase
