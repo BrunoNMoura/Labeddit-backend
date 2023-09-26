@@ -30,7 +30,7 @@ export class UserBusiness {
       throw new BadRequestError("only admins can access this feature")
     }
 
-    const resultDB: UserDB[] = await this.userDatabase.getUser(q)
+    const resultDB: UserDB[] = await this.userDatabase.findUsers(q)
 
     const output: GetUsersOutputDTO[] = resultDB.map((user) => {
       return {
