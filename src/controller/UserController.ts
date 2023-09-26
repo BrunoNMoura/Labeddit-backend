@@ -31,7 +31,7 @@ export class UserController {
       }
     }
   }
-   public singUp = async (req: Request, res: Response): Promise<void> => {
+   public signUp = async (req: Request, res: Response): Promise<void> => {
 
     try {
       const input = SignupSchema.parse({
@@ -40,7 +40,7 @@ export class UserController {
         password: req.body.password,
       });
 
-      const output = await this.userBusiness.singUp(input);
+      const output = await this.userBusiness.signUp(input);
 
       res.status(201).send(output)
 

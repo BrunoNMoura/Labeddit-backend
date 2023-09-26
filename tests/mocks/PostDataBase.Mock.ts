@@ -1,4 +1,4 @@
-import { BaseDataBase } from "../../src/database/BaseDataBase"
+import { BaseDataBase } from "../../src/database/BaseDatabase"
 import { LikesDislikesDB, PostDB, PostResultDB, PostUpdateDB } from "../../src/models/Post"
 import { liksMock } from "./LikesDislikesDataBase.Mock"
 
@@ -55,12 +55,10 @@ export class PostDataBaseMock extends BaseDataBase {
         const result: PostDB[] = postMock.filter( post => post.id == id)
         return result
     }
- 
+     
   public findLikeDislike = async (actionId: string, userId: string): Promise<LikesDislikesDB> => {
     const [resultDB]: LikesDislikesDB[] = liksMock
       .filter(like => like.action_id == actionId && like.user_id == userId)
     return resultDB
   }
-
-
 }
