@@ -8,6 +8,7 @@ import { TokenManagerMock } from "../../mocks/TokenManager.Mock";
 import { UserDataBaseMock } from "../../mocks/UserDataBase.Mock";
 import { BaseError } from "../../../src/errors/BaseError";
 import { BadRequestError } from "../../../src/errors/BadRequestError";
+import { UnauthorizedError } from "../../../src/errors/UnauthorizedError";
 
 describe("Testing getUsers", () => {
   const userBusiness = new UserBusiness(
@@ -66,15 +67,15 @@ describe("Testing getUsers", () => {
     });
   });
 
-  test("should return the message 'invalid token'", async () => {
+  test("should return the message 'only admins can access this feature'", async () => {
     try {
       const input = GetUsersSchema.parse({
         token: "id-mock-fulano",
       });
       await userBusiness.getUsers(input);
     } catch (error) {
-      if (error instanceof BadRequestError) {
-        expect(error.message).toBe("invalid token");
+      if (error instanceof UnauthorizedError) {
+        expect(error.message).toEqual("only admins can access this feature");
       }
     }
   });
