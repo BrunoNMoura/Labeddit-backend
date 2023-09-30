@@ -3,7 +3,7 @@ import { BaseDataBase } from "./BaseDatabase";
 
 export class LikeDislikeDatabase extends BaseDataBase {
 
-  public static TABLE_LIKES_DISLIKES = "likes_deslikes"
+  public static TABLE_LIKES_DISLIKES = "likes_dislikes"
 
   public insertLikeDislike = async (likeDislike: LikesDislikesDB): Promise<void> => {
     await BaseDataBase.connection(LikeDislikeDatabase.TABLE_LIKES_DISLIKES).insert(likeDislike);

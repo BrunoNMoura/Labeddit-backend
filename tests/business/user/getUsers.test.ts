@@ -1,12 +1,13 @@
+import { ZodError } from "zod";
 import { UserBusiness } from "../../../src/business/UserBusiness";
 import { GetUsersSchema } from "../../../src/dtos/users/getUsers.dto";
-import { ForbiddenError } from "../../../src/errors/ForbiddenError";
-import { UnauthorizedError } from "../../../src/errors/UnauthorizedError";
 import { USER_ROLES } from "../../../src/models/User";
 import { HashManagerMock } from "../../mocks/HashManager.Mock";
 import { IdGeneratorMock } from "../../mocks/IdGenerator.Mock";
 import { TokenManagerMock } from "../../mocks/TokenManager.Mock";
 import { UserDataBaseMock } from "../../mocks/UserDataBase.Mock";
+import { BaseError } from "../../../src/errors/BaseError";
+import { BadRequestError } from "../../../src/errors/BadRequestError";
 
 describe("Testing getUsers", () => {
   const userBusiness = new UserBusiness(
@@ -18,23 +19,42 @@ describe("Testing getUsers", () => {
 
   test("should return a list of users", async () => {
     const input = GetUsersSchema.parse({
-      token: "id-mock-astrodev"
+      token: "token-mock-astrodev",
     });
     const output = await userBusiness.getUsers(input);
     expect(output).toHaveLength(2);
-    expect(output).toContainEqual({
-      id: "id-mock-astrodev",
-      name: "Astrodev",
-      email: "astrodev@email.com",
-      createdAt: expect.any(String),
-      role: USER_ROLES.ADMIN
-    });
+    expect(output).toEqual([
+      {
+        id: "id-mock-fulano",
+        name: "Fulano",
+        email: "fulano@email.com",
+        createdAt: expect.any(String),
+        role: USER_ROLES.NORMAL
+      },
+      {
+        id: "id-mock-astrodev",
+        name: "Astrodev",
+        email: "astrodev@email.com",
+        createdAt: expect.any(String),
+        role: USER_ROLES.ADMIN
+      },
+    ]);
   });
-
+  test("token error not reported", async () => {
+    expect.assertions(1);
+    try {
+      const input = GetUsersSchema.parse({
+        token: "",
+      });
+      await userBusiness.getUsers(input);
+    } catch (error) {
+      expect(error instanceof ZodError).toBe(true);
+    }
+  });
   test("should return a user", async () => {
     const input = GetUsersSchema.parse({
       q: "Astrodev",
-      token: "id-mock-astrodev"
+      token: "token-mock-astrodev",
     });
     const output = await userBusiness.getUsers(input);
     expect(output).toContainEqual({
@@ -42,19 +62,19 @@ describe("Testing getUsers", () => {
       name: "Astrodev",
       email: "astrodev@email.com",
       createdAt: expect.any(String),
-      role: USER_ROLES.ADMIN
+      role: USER_ROLES.ADMIN,
     });
   });
 
-  test("should return the message 'only admins can access'", async () => {
+  test("should return the message 'invalid token'", async () => {
     try {
       const input = GetUsersSchema.parse({
-        token: "id-mock-fulano"
+        token: "id-mock-fulano",
       });
-      const output = await userBusiness.getUsers(input);
+      await userBusiness.getUsers(input);
     } catch (error) {
-      if (error instanceof ForbiddenError) {
-        expect(error.message).toEqual("Valid token but not enough permissions");
+      if (error instanceof BadRequestError) {
+        expect(error.message).toBe("invalid token");
       }
     }
   });
@@ -62,12 +82,13 @@ describe("Testing getUsers", () => {
   test("should return the message 'invalid token'", async () => {
     try {
       const input = GetUsersSchema.parse({
-        token: "token-incorrect"
+        token: "token-mock-incorrect",
       });
       const output = await userBusiness.getUsers(input);
     } catch (error) {
-      if (error instanceof UnauthorizedError) {
-        expect(error.message).toEqual("invalid token");
+      expect(error instanceof BaseError).toBe(true);
+      if (error instanceof BadRequestError) {
+        expect(error.message).toBe("invalid token");
       }
     }
   });

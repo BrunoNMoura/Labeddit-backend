@@ -26,7 +26,7 @@ export class UserBusiness {
       throw new BadRequestError("invalid token")
     }
 
-    if (payload.role != USER_ROLES.ADMIN) {
+    if (payload.role !== USER_ROLES.ADMIN) {
       throw new BadRequestError("only admins can access this feature")
     }
 

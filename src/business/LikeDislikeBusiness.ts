@@ -18,7 +18,7 @@ export class LikeDislikeBusiness {
     const likeVal: number = like ? 1 : 0;
 
     const payLoad = this.tokenManager.getPayload(token);
-    if (payLoad === undefined || payLoad === null) {
+    if (payLoad == undefined || null) {
       throw new BadRequestError("Invalid token");
     }
     const { id:userId } = payLoad;

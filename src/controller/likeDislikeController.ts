@@ -15,7 +15,8 @@ export class LikeDislikeController {
         action: req.body.action,
         token: req.headers.authorization as string
       })
-
+      console.log(input);
+      
       const output = await this.likeDislikeBusiness.likeDislike(input)
       res.status(200).send(output)
 

@@ -1,12 +1,12 @@
 import { CommentDataBase } from "../database/CommentDatabase";
 import { CreateCommentInputDTO } from "../dtos/comments/creatComment.dto";
 import { DeleteCommentInputDTO } from "../dtos/comments/deleteComment.dto";
-import { GetCommentInputDTO } from "../dtos/comments/getPost.dto";
+import { GetCommentInputDTO, GetCommentOutputDTO } from "../dtos/comments/getPost.dto";
 import { UpdateCommentInputDTO } from "../dtos/comments/updateComment.dto";
 import { BadRequestError } from "../errors/BadRequestError";
 import { NotFoundError } from "../errors/NotFoundError";
 import { UnauthorizedError } from "../errors/UnauthorizedError";
-import { CommentDB, CommentModel, CommentResultDB, CommentUpdateDB } from "../models/Comments";
+import { CommentDB, CommentResultDB, CommentUpdateDB } from "../models/Comments";
 import { LIKED } from "../models/Post";
 import { USER_ROLES } from "../models/User";
 import { IdGenerator } from "../services/IdGenerator";
@@ -19,15 +19,15 @@ export class CommentBusiness {
     private tokenManager: TokenManager
   ) {}
 
-  public getComment = async (input: GetCommentInputDTO): Promise<CommentModel[]> => {
-    const { commentId, token } = input;
+  public getComment = async (input: GetCommentInputDTO): Promise<GetCommentOutputDTO> => {
+    const { postId, token } = input;
 
     const payLoad = this.tokenManager.getPayload(token);
     if (payLoad == null) {
       throw new BadRequestError("Invalid token");
     }
 
-    const resultDB: CommentResultDB[] = await this.commentDataBase.getComment(commentId);
+    const resultDB: CommentResultDB[] = await this.commentDataBase.getComment(postId);
 
     const response = await Promise.all(resultDB.map(async (comment) => {
       const resultLikedDB = await this.commentDataBase.findLikeDislike(comment.id, payLoad.id);
@@ -37,10 +37,9 @@ export class CommentBusiness {
       if (resultLikedDB != undefined) {
         liked = resultLikedDB.like == 1 ? LIKED.LIKE : LIKED.DISLIKE;
       }
-      const commentNew: CommentModel = {
+      const commentNew = {
         id: comment.id,
         postId: comment.post_id,
-        parentalPostId: comment.parental_post_id,
         content: comment.content,
         likes: comment.likes,
         dislikes: comment.dislikes,
@@ -60,7 +59,7 @@ export class CommentBusiness {
     const { postId, content, token } = input;
 
     const payload = this.tokenManager.getPayload(token);
-    if (payload == undefined) {
+    if (payload == undefined||null) {
       throw new BadRequestError("invalid token");
     }
     const { id: creatorId } = payload;
@@ -77,7 +76,6 @@ export class CommentBusiness {
       id,
       post_id: postId,
       creator_id: creatorId,
-      parental_post_id: "",
       content,
       likes: 0,
       dislikes: 0,
@@ -88,10 +86,10 @@ export class CommentBusiness {
     await this.commentDataBase.insertComment(newComment);
     await this.commentDataBase.incrementComments(postId);
 
-    return "ok";
+    return "comment created";
   }
 
-  public editComment = async (input: UpdateCommentInputDTO): Promise<string> => {
+  public updateComment = async (input: UpdateCommentInputDTO): Promise<string> => {
     const { content, token,idToEdit } = input;
 
     const payload = this.tokenManager.getPayload(token);
@@ -142,7 +140,7 @@ export class CommentBusiness {
 
     await this.commentDataBase.deleteComment(idToDelete);
     await this.commentDataBase.decrementComments(resultComment.post_id);
-    return "deleted";
+    return "comment deleted";
   }
 
   
