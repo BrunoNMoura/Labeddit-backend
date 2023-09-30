@@ -3,7 +3,7 @@ import { BaseDataBase } from "./BaseDatabase";
 import { UserDataBase } from "./UserDatabase";
 
 export class PostDatabase extends BaseDataBase {
-  public static TABLE_POSTS = "posts"
+  public static TABLE_POSTS = "posts";
 
   public insertPost = async (newPost: PostDB): Promise<void> => {
     await BaseDataBase.connection(PostDatabase.TABLE_POSTS).insert(newPost);
@@ -20,14 +20,18 @@ export class PostDatabase extends BaseDataBase {
   };
 
   public deletePost = async (postId: string): Promise<void> => {
-    await BaseDataBase.connection(PostDatabase.TABLE_POSTS).del().where({ id: postId });
     await BaseDataBase.connection("likes_dislikes")
       .del()
       .where({ action_id: postId });
+    await BaseDataBase.connection(PostDatabase.TABLE_POSTS)
+      .del()
+      .where({ id: postId });
   };
 
   public getPost = async (): Promise<PostResultDB[]> => {
-    const response = await BaseDataBase.connection(`${PostDatabase.TABLE_POSTS} as p`)
+    const response = await BaseDataBase.connection(
+      `${PostDatabase.TABLE_POSTS} as p`
+    )
       .select(
         "p.id",
         "p.content",

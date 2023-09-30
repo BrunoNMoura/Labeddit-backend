@@ -3,7 +3,6 @@ import { LIKED } from "./Post";
 export interface CommentDB {
   id: string;
   post_id: string;
-  parental_post_id: string
   creator_id: string;
   content: string;
   likes: number;
@@ -23,7 +22,6 @@ export interface CommentModel {
   id: string,  
   content: string,
   postId: string,
-  parentalPostId: string,
   likes: number,
   dislikes: number,  
   comments: number,
@@ -37,7 +35,6 @@ export interface CommentModel {
 export interface CommentResultDB {
   id: string;
   post_id: string;
-  parental_post_id: string;
   content: string;
   likes: number;
   dislikes: number;

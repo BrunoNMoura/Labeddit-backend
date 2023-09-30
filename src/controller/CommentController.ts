@@ -15,8 +15,8 @@ export class CommentController {
       const input = GetCommentSchema.parse({
         postId: req.params.id,
         token: req.headers.authorization,
-      });
-
+      });      
+      
       const output = await this.commentBusiness.getComment(input);
 
       res.status(200).send(output);
@@ -39,7 +39,7 @@ export class CommentController {
         content: req.body.content,
         token: req.headers.authorization,
       });
-
+      
       const output = await this.commentBusiness.createComment(input);
 
       res.status(200).send(output);
@@ -55,7 +55,9 @@ export class CommentController {
     }
   }
 
-  public editComment = async (req: Request, res: Response) => {
+  public updateComment = async (req: Request, res: Response) => {
+   console.log(req.params.id);
+    
     try {
 
       const input = UpdateCommentSchema.parse({
@@ -63,8 +65,8 @@ export class CommentController {
         token: req.headers.authorization,
         idToEdit: req.params.id
       });
-
-      const output = await this.commentBusiness.editComment(input);
+      console.log(input);
+      const output = await this.commentBusiness.updateComment(input);
 
       res.status(200).send(output);
     } catch (error) {
@@ -80,9 +82,11 @@ export class CommentController {
   }
 
   public deleteComment = async (req: Request, res: Response) => {
+    console.log(req.params.id);
+    
     try {
       const input = DeleteCommentSchema.parse({
-        id: req.params.id,
+        idToDelete: req.params.id,
         token: req.headers.authorization as string,
       });
 

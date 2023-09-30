@@ -76,12 +76,15 @@ export class PostController {
   };
 
   public deletePost = async (req: Request, res: Response) => {
+    console.log(req.params.id);
+    
     try {
       const input = DeletePostSchema.parse({
         idToDelete: req.params.id,
         token: req.headers.authorization as string,
       });
-
+      console.log(input);
+      
       const output = await this.postBusiness.deletePost(input);
 
       res.status(200).send(output);
