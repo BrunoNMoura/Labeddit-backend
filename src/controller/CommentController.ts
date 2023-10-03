@@ -15,22 +15,21 @@ export class CommentController {
       const input = GetCommentSchema.parse({
         postId: req.params.id,
         token: req.headers.authorization,
-      });      
-      
+      });
+
       const output = await this.commentBusiness.getComment(input);
 
       res.status(200).send(output);
     } catch (error) {
-        console.log(error)
-        if (error instanceof ZodError) {
-          res.status(400).send(error.issues)
-        } else if (error instanceof BaseError) {
-          res.status(error.statusCode).send(error.message)
-        } else {
-          res.status(500).send("unexpected error")
-        }
+      if (error instanceof ZodError) {
+        res.status(400).send(error.issues);
+      } else if (error instanceof BaseError) {
+        res.status(error.statusCode).send(error.message);
+      } else {
+        res.status(500).send("unexpected error");
+      }
     }
-  }
+  };
 
   public createComment = async (req: Request, res: Response) => {
     try {
@@ -39,51 +38,44 @@ export class CommentController {
         content: req.body.content,
         token: req.headers.authorization,
       });
-      
+
       const output = await this.commentBusiness.createComment(input);
 
       res.status(200).send(output);
     } catch (error) {
-        console.log(error)
-        if (error instanceof ZodError) {
-          res.status(400).send(error.issues)
-        } else if (error instanceof BaseError) {
-          res.status(error.statusCode).send(error.message)
-        } else {
-          res.status(500).send("unexpected error")
-        }
+      if (error instanceof ZodError) {
+        res.status(400).send(error.issues);
+      } else if (error instanceof BaseError) {
+        res.status(error.statusCode).send(error.message);
+      } else {
+        res.status(500).send("unexpected error");
+      }
     }
-  }
+  };
 
   public updateComment = async (req: Request, res: Response) => {
-   console.log(req.params.id);
-    
     try {
-
       const input = UpdateCommentSchema.parse({
         content: req.body.content,
         token: req.headers.authorization,
-        idToEdit: req.params.id
+        idToEdit: req.params.id,
       });
-      console.log(input);
       const output = await this.commentBusiness.updateComment(input);
 
       res.status(200).send(output);
     } catch (error) {
-        console.log(error)
-        if (error instanceof ZodError) {
-          res.status(400).send(error.issues)
-        } else if (error instanceof BaseError) {
-          res.status(error.statusCode).send(error.message)
-        } else {
-          res.status(500).send("unexpected error")
-        }
+      console.log(error);
+      if (error instanceof ZodError) {
+        res.status(400).send(error.issues);
+      } else if (error instanceof BaseError) {
+        res.status(error.statusCode).send(error.message);
+      } else {
+        res.status(500).send("unexpected error");
+      }
     }
-  }
+  };
 
   public deleteComment = async (req: Request, res: Response) => {
-    console.log(req.params.id);
-    
     try {
       const input = DeleteCommentSchema.parse({
         idToDelete: req.params.id,
@@ -94,14 +86,13 @@ export class CommentController {
 
       res.sendStatus(200);
     } catch (error) {
-        console.log(error)
-        if (error instanceof ZodError) {
-          res.status(400).send(error.issues)
-        } else if (error instanceof BaseError) {
-          res.status(error.statusCode).send(error.message)
-        } else {
-          res.status(500).send("unexpected error")
-        }
+      if (error instanceof ZodError) {
+        res.status(400).send(error.issues);
+      } else if (error instanceof BaseError) {
+        res.status(error.statusCode).send(error.message);
+      } else {
+        res.status(500).send("unexpected error");
+      }
     }
-  }
+  };
 }
