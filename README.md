@@ -1,5 +1,5 @@
 # Labeddit-backend
-![Labook](./assets/Showing.png)
+![Labook](./assets/labeddit.postman.png)
 Building an API for a message posting app where you can post and comment on other posts and click on like or dislike.
 <br><br>
 For users, the API allows you to register a new user through signup and log in after registration. And if you are an administrator, you will be able to view all registered users, with the exception of passwords that are protected.
