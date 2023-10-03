@@ -68,6 +68,7 @@ describe("Testing getUsers", () => {
   });
 
   test("should return the message 'only admins can access this feature'", async () => {
+    expect.assertions(1);
     try {
       const input = GetUsersSchema.parse({
         token: "id-mock-fulano",

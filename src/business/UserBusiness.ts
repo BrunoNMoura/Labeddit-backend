@@ -48,6 +48,13 @@ export class UserBusiness {
   public signUp = async (input: SignupInputDTO): Promise<SignupOutputDTO> => {
     const { name, email, password } = input;
 
+   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,15}$/;
+    if (!passwordRegex.test(password)) {
+      throw new BadRequestError(
+        "'password' must be between 6 and 15 characters, including numbers, lowercase letters, at least one uppercase letter, and one special character"
+      );
+    }
+
     const id = this.idGenerator.generate();
 
     const hashedPassword = await this.hashManager.hash(password)

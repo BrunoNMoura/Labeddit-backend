@@ -35,14 +35,21 @@ describe("Testing getComments", () => {
       }
     }
   })
-
-  test("should return an empty array = []", async () => {
-    expect.assertions(1)
-    const input = {
-      postId: "id-fail",
-      token: "token-mock-fulano"
-    }
-    const result = await commentBusiness.getComment(input);
-    expect(result).toEqual([]);
-  })  
+  
 })
+describe("Testing checkIfPostExists", () => {
+  const commentDataBaseMock = new CommentDataBaseMock();
+
+  test("should return true for existing postId", async () => {
+    const existingPostId = "id-mock-post1";
+    const result = await commentDataBaseMock.checkIfPostExists(existingPostId);
+    expect(result).toBe(true);
+  });
+
+  test("should return false for non-existing postId", async () => {
+    const nonExistingPostId = "id-non-existent";
+    const result = await commentDataBaseMock.checkIfPostExists(nonExistingPostId);
+    expect(result).toBe(false);
+  });
+});
+

@@ -27,6 +27,7 @@ export class LikeDislikeBusiness {
       action_id: actionId,
       like: likeVal
     };
+   
     let postComment: PostDB | CommentDB;
     if (action === POST_ACTION.POST) {
       [postComment] = await this.likesDislikesDataBase.findPost(actionId);

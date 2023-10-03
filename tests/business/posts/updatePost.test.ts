@@ -2,9 +2,9 @@ import { PostBusiness } from "../../../src/business/PostBusiness";
 import { PostDataBaseMock } from "../../mocks/PostDataBase.Mock";
 import { IdGeneratorMock } from "../../mocks/IdGenerator.Mock";
 import { TokenManagerMock } from "../../mocks/TokenManager.Mock";
-import { BadRequestError } from "../../../src/errors/BadRequestError";
 import { UnauthorizedError } from "../../../src/errors/UnauthorizedError";
 import { NotFoundError } from "../../../src/errors/NotFoundError";
+import { ForbiddenError } from "../../../src/errors/ForbiddenError";
 
 describe("Testing editPost", () => {
   const postBusiness = new PostBusiness(
@@ -34,8 +34,8 @@ describe("Testing editPost", () => {
       };
       const result = await postBusiness.editPost(input);
     } catch (error) {
-      if (error instanceof UnauthorizedError) {
-        expect(error.message).toEqual("invalid token");
+      if (error instanceof ForbiddenError) {
+        expect(error.message).toEqual("Valid token but not enough permissions");
       }
     }
   });

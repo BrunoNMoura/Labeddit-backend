@@ -22,7 +22,7 @@ describe("Signup Test", () => {
     const input = SignupSchema.parse({
       name: "Ciclana",
       email: "ciclana@email.com",
-      password: "ciclana321",
+      password: "ciclana321@",
     });
     const output = await userBusiness.signUp(input);
     expect(output).toEqual({
@@ -37,7 +37,7 @@ describe("Signup Test", () => {
       const input = SignupSchema.parse({
         name: "C",
         email: "ciclana@email.com",
-        password: "ciclana321",
+        password: "ciclana321@",
       });
       userBusiness.signUp(input);
     } catch (error) {
@@ -55,7 +55,7 @@ describe("Signup Test", () => {
       const input = SignupSchema.parse({
         name: "Ciclana",
         email: "ciclana@",
-        password: "ciclana321",
+        password: "ciclana321@",
       });
       userBusiness.signUp(input);
     } catch (error) {

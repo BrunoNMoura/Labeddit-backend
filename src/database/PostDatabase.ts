@@ -9,12 +9,16 @@ export class PostDatabase extends BaseDataBase {
     await BaseDataBase.connection(PostDatabase.TABLE_POSTS).insert(newPost);
   };
 
-  public updatePost = async (
+  public editPost = async (
     updatePost: PostUpdateDB,
     creatorId: string
   ): Promise<void> => {
+    const PostUpdateDB= {
+      id: updatePost.idToEdit,
+      content: updatePost.content,
+      updated_at: updatePost.updated_at }
     await BaseDataBase.connection(PostDatabase.TABLE_POSTS)
-      .update(updatePost)
+      .update(PostUpdateDB)
       .where("id", "=", updatePost.idToEdit)
       .andWhere("creator_id", "=", creatorId);
   };

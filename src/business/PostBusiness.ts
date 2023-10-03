@@ -115,7 +115,7 @@ export class PostBusiness {
       throw new UnauthorizedError("Access denied");
     }
 
-    await this.postDataBase.updatePost(updatePost, creatorId);
+    await this.postDataBase.editPost(updatePost, creatorId);
 
     return "update made";
   };
