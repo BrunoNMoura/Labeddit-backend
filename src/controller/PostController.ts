@@ -19,7 +19,6 @@ export class PostController {
       const output = await this.postBusiness.getPost(input);
       res.status(200).send(output);
     } catch (error) {
-      console.log(error);
       if (error instanceof ZodError) {
         res.status(400).send(error.issues);
       } else if (error instanceof BaseError) {
@@ -41,7 +40,6 @@ export class PostController {
 
       res.status(201).send(output);
     } catch (error) {
-      console.log(error);
       if (error instanceof ZodError) {
         res.status(400).send(error.issues);
       } else if (error instanceof BaseError) {
@@ -57,14 +55,13 @@ export class PostController {
       const input = UpdatePostSchema.parse({
         content: req.body.content,
         token: req.headers.authorization,
-        idToEdit: req.params.id
+        idToEdit: req.params.id,
       });
 
       const output = await this.postBusiness.editPost(input);
 
       res.status(200).send(output);
     } catch (error) {
-      console.log(error);
       if (error instanceof ZodError) {
         res.status(400).send(error.issues);
       } else if (error instanceof BaseError) {
@@ -76,20 +73,16 @@ export class PostController {
   };
 
   public deletePost = async (req: Request, res: Response) => {
-    console.log(req.params.id);
-    
     try {
       const input = DeletePostSchema.parse({
         idToDelete: req.params.id,
         token: req.headers.authorization as string,
       });
-      console.log(input);
-      
+
       const output = await this.postBusiness.deletePost(input);
 
       res.status(200).send(output);
     } catch (error) {
-      console.log(error);
       if (error instanceof ZodError) {
         res.status(400).send(error.issues);
       } else if (error instanceof BaseError) {
