@@ -44,7 +44,7 @@ export class PostDataBaseMock extends BaseDataBase {
 
   public insertPost = async (newPost: PostDB): Promise<void> => {}
 
-  public updatePost = async (updatePost: PostUpdateDB, creatorId: string): Promise<void> => {}
+  public editPost = async (updatePost: PostUpdateDB, creatorId: string): Promise<void> => {}
 
   public deletePost = async (postId: string): Promise<void> => {}
 

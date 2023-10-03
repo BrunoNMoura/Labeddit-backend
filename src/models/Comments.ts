@@ -7,7 +7,6 @@ export interface CommentDB {
   content: string;
   likes: number;
   dislikes: number;
-  comments: number;
   created_at: string;
   updated_at: string;
 }
@@ -24,7 +23,6 @@ export interface CommentModel {
   postId: string,
   likes: number,
   dislikes: number,  
-  comments: number,
   creator: {
     id: string,
     name: string
@@ -38,7 +36,6 @@ export interface CommentResultDB {
   content: string;
   likes: number;
   dislikes: number;
-  comments: number;
   creator_id: string;
   creator_name: string;
   created_at: string;

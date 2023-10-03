@@ -53,4 +53,11 @@ export class CommentDataBase extends BaseDataBase {
       .where({ id: postId })
       .decrement("comments")
   }
+  public checkIfPostExists = async (postId: string): Promise<boolean> => {
+    const result = await BaseDataBase.connection(PostDatabase.TABLE_POSTS)
+      .select("id")
+      .where({ id: postId })
+      .first();
+    return !!result; 
+  }  
 }

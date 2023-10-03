@@ -1,5 +1,5 @@
 import { CommentBusiness } from "../../../src/business/CommentBusiness";
-import { BadRequestError } from "../../../src/errors/BadRequestError";
+import { ForbiddenError } from "../../../src/errors/ForbiddenError";
 import { NotFoundError } from "../../../src/errors/NotFoundError";
 import { UnauthorizedError } from "../../../src/errors/UnauthorizedError";
 import { CommentDataBaseMock } from "../../mocks/CommentDataBase.Mock";
@@ -32,8 +32,8 @@ describe("Testing deleteComment", () => {
       };
       await commentBusiness.deleteComment(input);
     } catch (error) {
-      if (error instanceof UnauthorizedError) {
-        expect(error.message).toEqual("invalid token");
+      if (error instanceof ForbiddenError) {
+        expect(error.message).toEqual("Valid token but not enough permissions");
       }
     }
   });

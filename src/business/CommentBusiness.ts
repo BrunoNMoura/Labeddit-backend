@@ -27,8 +27,13 @@ export class CommentBusiness {
       throw new BadRequestError("Invalid token");
     }
 
-    const resultDB: CommentResultDB[] = await this.commentDataBase.getComment(postId);
+    const resultDB: CommentResultDB[] = await this.commentDataBase.getComment(postId);    
 
+    const postExists = await this.commentDataBase.checkIfPostExists(postId);
+  if (!postExists) {
+    throw new NotFoundError("postId not found");
+  }
+    
     const response = await Promise.all(resultDB.map(async (comment) => {
       const resultLikedDB = await this.commentDataBase.findLikeDislike(comment.id, payLoad.id);
 
@@ -43,7 +48,7 @@ export class CommentBusiness {
         content: comment.content,
         likes: comment.likes,
         dislikes: comment.dislikes,
-        comments: comment.comments,
+        // comments: comment.comments,
         creator: {
           id: comment.creator_id,
           name: comment.creator_name,
@@ -79,7 +84,7 @@ export class CommentBusiness {
       content,
       likes: 0,
       dislikes: 0,
-      comments: 0,
+      // comments: 0,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     };
