@@ -17,6 +17,7 @@ export class UserController {
       })
 
       const output = await this.userBusiness.getUsers(input)
+console.log(output);
 
       res.status(200).send(output)
 
