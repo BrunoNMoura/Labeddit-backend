@@ -6,7 +6,7 @@ const usersMock: UserDB[] = [
       id: "id-mock-fulano",
       name: "Fulano",
       email: "fulano@email.com",
-      password: "hash-mock-fulano", // key = "fulano123@"
+      password: "hash-mock-fulano", // key = "Fulano123@"
       created_at: new Date().toISOString(),
       role: USER_ROLES.NORMAL
     },
@@ -14,7 +14,7 @@ const usersMock: UserDB[] = [
       id: "id-mock-astrodev",
       name: "Astrodev",
       email: "astrodev@email.com",
-      password: "hash-mock-astrodev", // key = "astrodev99@"
+      password: "hash-mock-astrodev", // key = "Astrodev99@"
       created_at: new Date().toISOString(),
       role: USER_ROLES.ADMIN
     },

@@ -3,6 +3,7 @@ import { GetUsersInputDTO, GetUsersOutputDTO } from "../dtos/users/getUsers.dto"
 import { LoginInputDTO, LoginOutputDTO } from "../dtos/users/login.dto";
 import { SignupInputDTO, SignupOutputDTO } from "../dtos/users/signup.dto";
 import { BadRequestError } from "../errors/BadRequestError";
+import { ForbiddenError } from "../errors/ForbiddenError";
 import { UnauthorizedError } from "../errors/UnauthorizedError";
 import {  TokenPayload, User, USER_ROLES, UserDB } from "../models/User";
 import { HashManager } from "../services/HashManager";
@@ -24,11 +25,11 @@ export class UserBusiness {
     const payload = this.tokenManager.getPayload(token)
 
     if (payload === null) {
-      throw new BadRequestError("invalid token")
+      throw new UnauthorizedError("invalid token")
     }
 
     if (payload.role !== USER_ROLES.ADMIN) {
-      throw new UnauthorizedError("only admins can access this feature")
+      throw new ForbiddenError()
     }
 
     const resultDB: UserDB[] = await this.userDatabase.findUsers(q)

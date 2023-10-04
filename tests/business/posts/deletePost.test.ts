@@ -4,6 +4,7 @@ import { IdGeneratorMock } from "../../mocks/IdGenerator.Mock";
 import { TokenManagerMock } from "../../mocks/TokenManager.Mock";
 import { UnauthorizedError } from "../../../src/errors/UnauthorizedError";
 import { NotFoundError } from "../../../src/errors/NotFoundError";
+import { ForbiddenError } from "../../../src/errors/ForbiddenError";
 
 describe("Testing deletePost", () => {
   const postBusiness = new PostBusiness(
@@ -27,7 +28,7 @@ describe("Testing deletePost", () => {
     }
   });
 
-  test("Delete post, should return 'Access denied'", async () => {
+  test("Delete post, should return 'Valid token but not enough permissions'", async () => {
     expect.assertions(1);
     try {
       const input = {
@@ -36,8 +37,8 @@ describe("Testing deletePost", () => {
       };
       const result = await postBusiness.deletePost(input);
     } catch (error) {
-      if (error instanceof UnauthorizedError) {
-        expect(error.message).toEqual("Access denied");
+      if (error instanceof ForbiddenError) {
+        expect(error.message).toEqual("Valid token but not enough permissions");
       }
     }
   });

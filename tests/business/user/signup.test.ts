@@ -22,7 +22,7 @@ describe("Signup Test", () => {
     const input = SignupSchema.parse({
       name: "Ciclana",
       email: "ciclana@email.com",
-      password: "ciclana321@",
+      password: "Ciclana321@",
     });
     const output = await userBusiness.signUp(input);
     expect(output).toEqual({
@@ -36,8 +36,8 @@ describe("Signup Test", () => {
     try {
       const input = SignupSchema.parse({
         name: "C",
-        email: "ciclana@email.com",
-        password: "ciclana321@",
+        email: "Beltrano@email.com",
+        password: "Beltrano321@",
       });
       userBusiness.signUp(input);
     } catch (error) {
@@ -49,13 +49,13 @@ describe("Signup Test", () => {
     }
   });
 
-  test("Zod should throw an error for 'email'", () => {
+  test("should throw an error for 'email'", () => {
     expect.assertions(1);
     try {
       const input = SignupSchema.parse({
         name: "Ciclana",
-        email: "ciclana@",
-        password: "ciclana321@",
+        email: "ciclana",
+        password: "Ciclana321@",
       });
       userBusiness.signUp(input);
     } catch (error) {
@@ -65,19 +65,22 @@ describe("Signup Test", () => {
     }
   });
 
-  test("Zod should throw an error for 'password'", () => {
-    expect.assertions(0);
+  test("should throw an error for 'password'",async () => {
+    expect.assertions(1);
     try {
       const input: SignupInputDTO = {
         name: "Ciclana",
-        email: "ciclana@email.com",
+        email: "Estranho@email.com",
         password: "ci321",
       };
 
       SignupSchema.parse(input);
+      const output = await userBusiness.signUp(input);
     } catch (error) {
-      if (error instanceof ZodError) {
-        expect(error.issues[0].message).toBe(
+      console.log(error);
+      
+      if (error instanceof BadRequestError) {
+        expect(error.message).toBe(
           "'password' must be between 6 and 15 characters, including numbers, lowercase letters, at least one uppercase letter, and one special character"
         );
       }
@@ -90,7 +93,7 @@ describe("Signup Test", () => {
       const input = SignupSchema.parse({
         name: "Fulano",
         email: "fulano@email.com",
-        password: "hash-mock-fulano", // Fulano123@
+        password: "Fulano123@" 
       });
 
       const output = await userBusiness.signUp(input);

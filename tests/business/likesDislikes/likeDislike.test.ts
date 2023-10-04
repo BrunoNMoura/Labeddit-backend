@@ -4,6 +4,8 @@ import { TokenManagerMock } from "../../mocks/TokenManager.Mock";
 import { POST_ACTION } from "../../../src/models/Post";
 import { BadRequestError } from "../../../src/errors/BadRequestError";
 import { NotFoundError } from "../../../src/errors/NotFoundError";
+import { UnauthorizedError } from "../../../src/errors/UnauthorizedError";
+import { ForbiddenError } from "../../../src/errors/ForbiddenError";
 
 describe("Testing like and dislike", () => {
   const likeDislikeBusiness = new LikeDislikeBusiness(
@@ -79,7 +81,7 @@ describe("Testing like and dislike", () => {
       };
       await likeDislikeBusiness.likeDislike(input);
     } catch (error) {
-      if (error instanceof BadRequestError) {
+      if (error instanceof UnauthorizedError) {
         expect(error.message).toEqual("Invalid token");
       }
     }
@@ -102,7 +104,7 @@ describe("Testing like and dislike", () => {
     }
   });
 
-  test("Should return 'Invalid action: you cannot like or dislike your own post/comment'", async () => {
+  test("Should return 'Valid token but not enough permissions'", async () => {
     expect.assertions(1);
     try {
       const input = {
@@ -113,8 +115,8 @@ describe("Testing like and dislike", () => {
       };
       const result = await likeDislikeBusiness.likeDislike(input);
     } catch (error) {
-      if (error instanceof BadRequestError) {
-        expect(error.message).toEqual("Invalid action: you cannot like or dislike your own post/comment");
+      if (error instanceof ForbiddenError) {
+        expect(error.message).toEqual("Valid token but not enough permissions");
       }
     }
   });

@@ -17,7 +17,7 @@ describe("Login Test", () => {
   test("should generate a token when login normal", async () => {
     const input = LoginSchema.parse({
       email: "fulano@email.com",
-      password: "fulano123@",
+      password: "Fulano123@",
     });
     const output = await userBusiness.login(input);
     expect(output).toEqual({
@@ -29,7 +29,7 @@ describe("Login Test", () => {
   test("should generate a token when login admin", async () => {
     const input = LoginSchema.parse({
       email: "astrodev@email.com",
-      password: "astrodev99@",
+      password: "Astrodev99@",
     });
     const output = await userBusiness.login(input);
     expect(output).toEqual({
@@ -58,7 +58,7 @@ describe("Login Test", () => {
     try {
       const input = {
         email: "fulano@email.com",
-        password: "fulano321",
+        password: "Fulano321",
       };
       const output = await userBusiness.login(input);
     } catch (error) {
