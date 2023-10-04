@@ -1,5 +1,5 @@
 # Labeddit-backend
-![Labook](./assets/Showing.png)
+![Labeddit](./assets/labeddit.postman.png)
 Building an API for a message posting app where you can post and comment on other posts and click on like or dislike.
 <br><br>
 For users, the API allows you to register a new user through signup and log in after registration. And if you are an administrator, you will be able to view all registered users, with the exception of passwords that are protected.
@@ -13,16 +13,15 @@ For comments, the API allows you to add a new comment on a post, in addition to 
 - <a href="#-Requests">Requests (Paths)</a>
 - <a href="#-Example-of-Requests">Example of Requests</a>
 - <a href="#-How-to-run-this-project">How to run this project</a>
+- <a href="#-Business-tests-in-jest">Business-tests in jest </a>
 - <a href="#-Technologies-used">Technologies used</a>
-- <a href="#-Demonstration">Demonstration</a>
 - <a href="#-Documentation">Documentation</a>
 - <a href="#-Developer">Developer</a>
-- <a href="#-Next steps">Next steps</a>
 
 ## 📸Layout
 - Folder structure
 
-![folder-structure](./assets/Layout-Vscode.png)
+![folder-structure](./assets/menu.VSCODE.png)
 
 ### Users Requests
 - /users
@@ -34,8 +33,12 @@ For comments, the API allows you to add a new comment on a post, in addition to 
 - /posts
 ### Posts by id
 - /posts/:id
-### Posts like or deslike
-- /posts/:id/like
+### Comments Requests
+- /comments
+### Comments by id
+- /comments/:id
+### like or deslike
+- /likes/:id
 
 ## Example of Requests
 
@@ -43,41 +46,34 @@ For comments, the API allows you to add a new comment on a post, in addition to 
 - returns all users
 ```
 [
-    {
-        "id": "u001",
-        "name": "Bruno",
-        "email": "bruno@email.com",
-        "role": "ADMIN",
-        "createdAt": "2023-08-04 21:54:18"
-    },
-    {
-        "id": "u002",
-        "name": "Danielle",
-        "email": "danielle@email.com",
-        "role": "NORMAL",
-        "createdAt": "2023-08-04 21:54:18"
-    },
-    {
-        "id": "u003",
-        "name": "Heitor",
-        "email": "heitor@email.com",
-        "role": "NORMAL",
-        "createdAt": "2023-08-04 21:54:18"
-    },
-    {
-        "id": "u004",
-        "name": "Arthur",
-        "email": "arthur@email.com",
-        "role": "NORMAL",
-        "createdAt": "2023-08-04 21:54:18"
-    },
-    {
-        "id": "4e86a10a-f18d-4821-ae72-e3dfb7862287",
-        "name": "fulano",
-        "email": "fulano@email.com",
-        "role": "NORMAL",
-        "createdAt": "2023-08-27T13:16:20.114Z"
-    }
+  {
+    "id": "u002",
+    "name": "Bruno",
+    "email": "bruno@email.com",
+    "role": "ADMIN",
+    "createdAt": "2023-09-07 21:33:47"
+  },
+  {
+    "id": "13d3b96f-badb-48ba-b21d-8dff2b3f1de4",
+    "name": "Danielle",
+    "email": "danielle123@email.com",
+    "role": "NORMAL",
+    "createdAt": "2023-09-29T22:19:26.676Z"
+  },
+  {
+    "id": "32d21486-b1e4-40f4-8b58-826479775c12",
+    "name": "Heitor",
+    "email": "heitor123@email.com",
+    "role": "NORMAL",
+    "createdAt": "2023-09-29T22:21:07.107Z"
+  },
+  {
+    "id": "1f48c459-2229-4f16-87d2-4c4048d3cff2",
+    "name": "Arthur",
+    "email": "arthur123@email.com",
+    "role": "NORMAL",
+    "createdAt": "2023-10-01T18:53:52.442Z"
+  }
 ]
 ```
 ### POST/Signup
@@ -85,16 +81,16 @@ For comments, the API allows you to add a new comment on a post, in addition to 
 - body:
 ```
 {
-    "name":"beltrano",
-    "email":"beltrano@email.com",
-    "password":"beltrano123"
+    "name":"Tania",
+	"email": "tania@email.com",
+	"password": "Tania123@"
 }
 ```
 - return:
 ```
 {
-    "message": "Registration done successfully",
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFiODk2ZDhmLWY2Y2MtNGE5ZC1hYWVkLTI4OTc2NDBjMWMwYyIsIm5hbWUiOiJiZWx0cmFubyIsInJvbGUiOiJOT1JNQUwiLCJpYXQiOjE2OTMxNjc1MjYsImV4cCI6MTY5Mzc3MjMyNn0.nzmrlTOY0HfDBtx4R7jt4L0dpiWI07ztVvXkFHPrFFg"
+  "message": "Registration done successfully",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFmNDhjNDU5LTIyMjktNGYxNi04N2QyLTRjNDA0OGQzY2ZmMiIsIm5hbWUiOiJBcnRodXIiLCJyb2xlIjoiTk9STUFMIiwiaWF0IjoxNjk2MTg2NDMyLCJleHAiOjE2OTY3OTEyMzJ9.ZDLbnuPycXQbpe904lNya0BAEjRVaBWBVSrcpwD3_0s"
 }
 ```
 ### POST/Login
@@ -102,15 +98,15 @@ For comments, the API allows you to add a new comment on a post, in addition to 
 - body:
 ```
 {
-    "email":"fulano@email.com",
-    "password":"fulano123"
+	"email": "tania@email.com",
+	"password": "Tania123@"
 }
 ```
 - return:
 ```
 {
     "message": "Login successful!",
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRlODZhMTBhLWYxOGQtNDgyMS1hZTcyLWUzZGZiNzg2MjI4NyIsIm5hbWUiOiJmdWxhbm8iLCJyb2xlIjoiTk9STUFMIiwiaWF0IjoxNjkzMTU3MTYzLCJleHAiOjE2OTM3NjE5NjN9.nJCufbZumrd_O7jogJ996_qCmS4NCCOEoSUKJuO65-M"
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFmNDhjNDU5LTIyMjktNGYxNi04N2QyLTRjNDA0OGQzY2ZmMiIsIm5hbWUiOiJBcnRodXIiLCJyb2xlIjoiTk9STUFMIiwiaWF0IjoxNjk2MTg2NDMyLCJleHAiOjE2OTY3OTEyMzJ9.ZDLbnuPycXQbpe904lNya0BAEjRVaBWBVSrcpwD3_0s"
 }
 ```
 ### GET/posts
@@ -123,88 +119,30 @@ For comments, the API allows you to add a new comment on a post, in addition to 
 ```
 [
     {
-        "id": "p001",
-        "content": "Fala galera, quem diria que ia comprender um pouco de programação!Estou aprandendo cada dia mais!",
+        "id": "4626361b-a67b-472a-9b6e-0009bf6ccec4",
+        "content": "Fala galera, quem diria que ia ver o Bruno aprendendo alguma coisa de programção.kkkk",
         "likes": 0,
         "dislikes": 0,
-        "createdAt": "2023-08-04 23:07:13",
-        "updatedAt": "2023-08-04 23:07:13",
+        "comments": 1,
+        "updatedAt": "2023-09-29T22:20:09.276Z",
         "creator": {
-            "id": "u001",
-            "name": "Bruno"
-        }
+            "id": "13d3b96f-badb-48ba-b21d-8dff2b3f1de4",
+            "name": "Danielle"
+        },
+        "liked": "no"
     },
     {
         "id": "p002",
-        "content": "Fala galera, quem diria que ia ver o Bruno aprendendo alguma coisa de programção.kkkk",
-        "likes": 1,
+        "content": "Fala galera, quem diria que ia comprender um pouco de programação!Estou aprandendo cada dia mais!",
+        "likes": 0,
         "dislikes": 0,
-        "createdAt": "2023-08-04 23:07:13",
-        "updatedAt": "2023-08-04 23:07:13",
+        "comments": 0,
+        "updatedAt": "2023-09-15 19:02:17",
         "creator": {
             "id": "u002",
-            "name": "Danielle"
-        }
-    },
-    {
-        "id": "p003",
-        "content": "Fala familia, Meu pai esta aprendendo e gosto de ver o que ele consegui produzir. E quando é de pokemon é melhor ainda.kkkkk",
-        "likes": 0,
-        "dislikes": 0,
-        "createdAt": "2023-08-04 23:07:13",
-        "updatedAt": "2023-08-04 23:07:13",
-        "creator": {
-            "id": "u003",
-            "name": "Heitor"
-        }
-    },
-    {
-        "id": "p004",
-        "content": "Fala pessoal, cansei de ver meu pai no computador, quero que ele fique sempre comigo.",
-        "likes": 0,
-        "dislikes": 0,
-        "createdAt": "2023-08-04 23:07:13",
-        "updatedAt": "2023-08-04 23:07:13",
-        "creator": {
-            "id": "u004",
-            "name": "Arthur"
-        }
-    },
-    {
-        "id": "53354958-e7ac-4c0b-809a-cc53fb833013",
-        "content": "Rumo ao últimos detalhes do projeto!",
-        "likes": 0,
-        "dislikes": 0,
-        "createdAt": "2023-08-27T14:07:50.301Z",
-        "updatedAt": "2023-08-27T14:07:50.301Z",
-        "creator": {
-            "id": "u001",
             "name": "Bruno"
-        }
-    },
-    {
-        "id": "4808b5a2-4b36-4457-aded-3d8aa4248e6e",
-        "content": "Esse Bruno é complicado, deixando tudo para última hora!",
-        "likes": 0,
-        "dislikes": 0,
-        "createdAt": "2023-08-27T14:40:34.613Z",
-        "updatedAt": "2023-08-27T14:40:34.613Z",
-        "creator": {
-            "id": "4e86a10a-f18d-4821-ae72-e3dfb7862287",
-            "name": "fulano"
-        }
-    },
-    {
-        "id": "5f61c236-8f37-41ac-923e-4372894dba99",
-        "content": "Estou na reta final do projeto!!!!!",
-        "likes": 0,
-        "dislikes": 0,
-        "createdAt": "2023-08-27T17:35:27.416Z",
-        "updatedAt": "2023-08-27T17:35:27.416Z",
-        "creator": {
-            "id": "u001",
-            "name": "Bruno"
-        }
+        },
+        "liked": "no"
     }
 ]
 ```
@@ -216,21 +154,28 @@ For comments, the API allows you to add a new comment on a post, in addition to 
 
 - body:
 ```
-{
-    "content":"Estou na reta final do projeto!!!!!"
+{   
+	"content": "Finalizando o Backend do projeto integrador!"	
 }
 ```
 - retunr:
 ```
 {
-    "message": "post created successfully!"
+    "id": "eb0d544c-264e-4a8c-8d28-cbde7b60baa8",
+    "creator_id": "u002",
+    "content": "Finalizando o Backend do projeto integrador!",
+    "likes": 0,
+    "dislikes": 0,
+    "comments": 0,
+    "created_at": "2023-10-01T19:11:59.660Z",
+    "updated_at": "2023-10-01T19:11:59.660Z"
 }
 ```
 ### PUT/post
 
 - insert postId in query
 
-![PostId](./assets/Id.png)
+![PostId](./assets/IdPost.png)
 
 - insert token in authorization in header
 
@@ -239,19 +184,17 @@ For comments, the API allows you to add a new comment on a post, in addition to 
 - body:
 ```
 {
-    "content":"Rumo ao últimos detalhes do projeto!"
+    "content":"first updated post"
 }
 ```
 - return:
 ```
-{
-    "message": "post changed successfully!"
-}
+update made
 ```
 ### DELETE/post
 - insert postId in query
 
-![PostId](./assets/Id.png)
+![PostId](./assets/IdPost.png)
 
 - insert token in authorization in header
 
@@ -259,15 +202,47 @@ For comments, the API allows you to add a new comment on a post, in addition to 
 
 - return:
 ```
-{
-    "message": "Post successfully deleted!"
-}
+deleted
 ```
-### PUT/like or deslike
-
+### GET/comments
 - insert postId in query
 
-![PostId](./assets/Id.png)
+![PostId](./assets/IdPost.png)
+
+- insert token in authorization in header
+
+![authorization](./assets/authorization.png)
+
+- return all posts
+```
+[
+    {
+        "id": "7db2a2ed-ac60-438e-91b6-f2bd33dfca06",
+        "postId": "4626361b-a67b-472a-9b6e-0009bf6ccec4",
+        "content": "Eu vive para ver o Bruno aprendendo alguma coisa de programção.kkkk",
+        "likes": 1,
+        "dislikes": 0,
+        "creator": {
+            "id": "32d21486-b1e4-40f4-8b58-826479775c12",
+            "name": "Heitor"
+        },
+        "liked": "no"
+    },
+    {
+        "id": "0f24ebe8-5abf-44cb-ae29-e809c15d1b84",
+        "postId": "4626361b-a67b-472a-9b6e-0009bf6ccec4",
+        "content": "Realmente parece mentira mais é verdade estou aprendendo e me formando!",
+        "likes": 0,
+        "dislikes": 0,
+        "creator": {
+            "id": "u002",
+            "name": "Bruno"
+        },
+        "liked": "no"
+    }
+]
+```
+### POST/comment
 
 - insert token in authorization in header
 
@@ -276,14 +251,88 @@ For comments, the API allows you to add a new comment on a post, in addition to 
 - body:
 ```
 {
-    "like":true
+	"postId": "4626361b-a67b-472a-9b6e-0009bf6ccec4",
+    "content":"Realmente parece mentira mais é verdade estou aprendendo e me formando!"
+}
+```
+- retunr:
+```
+comment created
+```
+### PUT/comment
+
+- insert commentId in query
+
+![CommentId](./assets/IdComment.png)
+
+- insert token in authorization in header
+
+![authorization](./assets/authorization.png)
+
+- body:
+```
+{
+    "content":"update comment at post"
 }
 ```
 - return:
 ```
+update made
+```
+### DELETE/comment
+- insert postId in query
+
+![CommentId](./assets/IdComment.png)
+
+- insert token in authorization in header
+
+![authorization](./assets/authorization.png)
+
+- return:
+```
+comment deleted
+```
+### PUT/like or deslike/post
+
+- insert postId in query
+
+![PostId](./assets/IdPost.png)
+
+- insert token in authorization in header
+
+![authorization](./assets/authorization.png)
+
+- body:
+```
 {
-    "message": "like or dislike successfully updated!"
+	"like": true,//or false
+    "action":"posts"
 }
+```
+- return:
+```
+ok
+```
+### PUT/like or deslike/comment
+
+- insert postId in query
+
+![CommentId](./assets/IdComment.png)
+
+- insert token in authorization in header
+
+![authorization](./assets/authorization.png)
+
+- body:
+```
+{
+	"like": true,//or false
+    "action":"comments"
+}
+```
+- return:
+```
+ok
 ```
 ## 💻 How to run this project
 - If you want to download and install this project on your computer, you need to have git and node installed.
@@ -318,6 +367,9 @@ or
 yarn start
 ```
 
+## 🛠 Business-tests in jest
+![BusinessTests](./assets/tests.png)
+
 ## 🛠 Technologies used
 ✅[Node.js](https://nodejs.org/en)
 <br>
@@ -336,11 +388,16 @@ yarn start
 ✅[UUID Generator](https://www.uuidgenerator.net/)
 <br>
 ✅[JWT](https://jwt.io/)
+<br>
+✅[AWS](https://aws.amazon.com/pt/?nc2=h_lg)
 
 
 
 ## 📚 Documentation
 [View Postman-Labeddit-Backend](https://documenter.getpostman.com/view/26570541/2s9YJdV2PL)
+
+## 💻 Front-end
+[Front-end repository link]()
 
 ## 🏆 Developer
 ![BrunoMoura](./assets/Bruno.jpg)
@@ -348,7 +405,3 @@ yarn start
 Bruno Nascimento Moura
 <br>
 [Linkedin](https://www.linkedin.com/in/bruno-moura-dev/)
-
-## 🪜 Next steps
-- Expand the database
-- Implement the API in a frontend application
