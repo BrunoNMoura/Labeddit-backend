@@ -3,7 +3,7 @@ import { CreatePostInputDTO } from "../dtos/posts/createPost.dto";
 import { DeletePostInputDTO } from "../dtos/posts/deletePost.dto";
 import { GetPostInputDTO, GetPostOutputDTO } from "../dtos/posts/getPost.dto";
 import { UpdatePostInputDTO } from "../dtos/posts/updataPost.dto";
-import { BadRequestError } from "../errors/BadRequestError";
+import { ForbiddenError } from "../errors/ForbiddenError";
 import { NotFoundError } from "../errors/NotFoundError";
 import { UnauthorizedError } from "../errors/UnauthorizedError";
 import { LIKED, PostDB, PostUpdateDB } from "../models/Post";
@@ -65,7 +65,7 @@ export class PostBusiness {
 
     const payload = this.tokenManager.getPayload(token);
     if (payload == undefined) {
-      throw new BadRequestError("invalid token");
+      throw new UnauthorizedError("invalid token");
     }
 
     const { id: creatorId } = payload;
@@ -112,7 +112,7 @@ export class PostBusiness {
     }
 
     if (resultPost.creator_id != creatorId) {
-      throw new UnauthorizedError("Access denied");
+      throw new ForbiddenError();
     }
 
     await this.postDataBase.editPost(updatePost, creatorId);
@@ -137,7 +137,7 @@ export class PostBusiness {
     }
 
     if (resultPost.creator_id != creatorId && role != USER_ROLES.ADMIN) {
-      throw new UnauthorizedError("Access denied");
+      throw new ForbiddenError();
     }
 
     await this.postDataBase.deletePost(idToDelete);

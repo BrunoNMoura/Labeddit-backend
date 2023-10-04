@@ -2,7 +2,7 @@ import { BaseError } from "./BaseError";
 
 export class UnauthorizedError extends BaseError {
     constructor(
-        message: string = "only admins can access this feature"
+        message: string = "invalid token"
     ) {
         super(401, message)
     }

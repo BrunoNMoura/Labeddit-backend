@@ -1,5 +1,5 @@
 import { CommentBusiness } from "../../../src/business/CommentBusiness";
-import { BadRequestError } from "../../../src/errors/BadRequestError";
+import { UnauthorizedError } from "../../../src/errors/UnauthorizedError";
 import { CommentDataBaseMock } from "../../mocks/CommentDataBase.Mock";
 import { IdGeneratorMock } from "../../mocks/IdGenerator.Mock";
 import { TokenManagerMock } from "../../mocks/TokenManager.Mock";
@@ -30,7 +30,7 @@ describe("Testing getComments", () => {
       }
       const result = await commentBusiness.getComment(input)
     } catch (error) {
-      if (error instanceof BadRequestError) {
+      if (error instanceof UnauthorizedError) {
         expect(error.message).toEqual("Invalid token");
       }
     }

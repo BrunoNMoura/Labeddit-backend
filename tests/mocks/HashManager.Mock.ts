@@ -9,9 +9,9 @@ export class HashManagerMock {
       hash: string
     ): Promise<boolean> => {
       switch(plaintext) {
-        case "fulano123@":
+        case "Fulano123@":
           return hash === "hash-mock-fulano"
-        case "astrodev99@":
+        case "Astrodev99@":
           return hash === "hash-mock-astrodev"          
         default:
           return false

@@ -1,7 +1,8 @@
 import { LikeDislikeDatabase } from "../database/LikeDislikeDatabase";
 import { LikeDislikeInputDTO } from "../dtos/likeDislikes/likeDislike.dto";
-import { BadRequestError } from "../errors/BadRequestError";
+import { ForbiddenError } from "../errors/ForbiddenError";
 import { NotFoundError } from "../errors/NotFoundError";
+import { UnauthorizedError } from "../errors/UnauthorizedError";
 import { CommentDB } from "../models/Comments";
 import { PostDB, LikesDislikesDB, POST_ACTION } from "../models/Post";
 import { TokenManager } from "../services/TokenManager";
@@ -19,7 +20,7 @@ export class LikeDislikeBusiness {
 
     const payLoad = this.tokenManager.getPayload(token);
     if (payLoad == undefined || null) {
-      throw new BadRequestError("Invalid token");
+      throw new UnauthorizedError("Invalid token");
     }
     const { id:userId } = payLoad;
     const postLikeDislike: LikesDislikesDB = {
@@ -40,7 +41,7 @@ export class LikeDislikeBusiness {
     }
 
     if (postComment.creator_id === userId) {
-      throw new BadRequestError("Invalid action: you cannot like or dislike your own post/comment");
+      throw new ForbiddenError("Valid token but not enough permissions");
     }
     const likeDislikeDB: LikesDislikesDB = 
     await this.likesDislikesDataBase.findLikeDislike(actionId, userId);

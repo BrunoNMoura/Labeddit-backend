@@ -3,7 +3,7 @@ import { CreateCommentInputDTO } from "../dtos/comments/creatComment.dto";
 import { DeleteCommentInputDTO } from "../dtos/comments/deleteComment.dto";
 import { GetCommentInputDTO, GetCommentOutputDTO } from "../dtos/comments/getPost.dto";
 import { UpdateCommentInputDTO } from "../dtos/comments/updateComment.dto";
-import { BadRequestError } from "../errors/BadRequestError";
+import { ForbiddenError } from "../errors/ForbiddenError";
 import { NotFoundError } from "../errors/NotFoundError";
 import { UnauthorizedError } from "../errors/UnauthorizedError";
 import { CommentDB, CommentResultDB, CommentUpdateDB } from "../models/Comments";
@@ -24,7 +24,7 @@ export class CommentBusiness {
 
     const payLoad = this.tokenManager.getPayload(token);
     if (payLoad == null) {
-      throw new BadRequestError("Invalid token");
+      throw new UnauthorizedError("Invalid token");
     }
 
     const resultDB: CommentResultDB[] = await this.commentDataBase.getComment(postId);    
@@ -48,7 +48,6 @@ export class CommentBusiness {
         content: comment.content,
         likes: comment.likes,
         dislikes: comment.dislikes,
-        // comments: comment.comments,
         creator: {
           id: comment.creator_id,
           name: comment.creator_name,
@@ -65,7 +64,7 @@ export class CommentBusiness {
 
     const payload = this.tokenManager.getPayload(token);
     if (payload == undefined||null) {
-      throw new BadRequestError("invalid token");
+      throw new UnauthorizedError("invalid token");
     }
     const { id: creatorId } = payload;
 
@@ -84,7 +83,6 @@ export class CommentBusiness {
       content,
       likes: 0,
       dislikes: 0,
-      // comments: 0,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     };
@@ -117,7 +115,7 @@ export class CommentBusiness {
     }
 
     if (resultComment.creator_id != creatorId) {
-      throw new UnauthorizedError("Access denied");
+      throw new ForbiddenError("Valid token but not enough permissions");
     }
     await this.commentDataBase.updateComment(updateComment, creatorId);
     return "update made";
@@ -140,7 +138,7 @@ export class CommentBusiness {
     }
 
     if (resultComment.creator_id != creatorId && role != USER_ROLES.ADMIN) {
-      throw new UnauthorizedError("Access denied");
+      throw new ForbiddenError("Valid token but not enough permissions");
     }
 
     await this.commentDataBase.deleteComment(idToDelete);

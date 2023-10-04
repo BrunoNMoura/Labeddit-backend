@@ -1,4 +1,5 @@
 import { CommentBusiness } from "../../../src/business/CommentBusiness";
+import { ForbiddenError } from "../../../src/errors/ForbiddenError";
 import { NotFoundError } from "../../../src/errors/NotFoundError";
 import { UnauthorizedError } from "../../../src/errors/UnauthorizedError";
 import { CommentDataBaseMock } from "../../mocks/CommentDataBase.Mock";
@@ -49,8 +50,8 @@ describe("Testing editComment", () => {
       }
       const result = await commentBusiness.updateComment(input)
     } catch (error) {
-      if (error instanceof UnauthorizedError) {
-        expect(error.message).toEqual("Access denied")
+      if (error instanceof ForbiddenError) {
+        expect(error.message).toEqual("Valid token but not enough permissions")
       }
     }
   })

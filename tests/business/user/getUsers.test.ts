@@ -7,8 +7,8 @@ import { IdGeneratorMock } from "../../mocks/IdGenerator.Mock";
 import { TokenManagerMock } from "../../mocks/TokenManager.Mock";
 import { UserDataBaseMock } from "../../mocks/UserDataBase.Mock";
 import { BaseError } from "../../../src/errors/BaseError";
-import { BadRequestError } from "../../../src/errors/BadRequestError";
 import { UnauthorizedError } from "../../../src/errors/UnauthorizedError";
+import { ForbiddenError } from "../../../src/errors/ForbiddenError";
 
 describe("Testing getUsers", () => {
   const userBusiness = new UserBusiness(
@@ -30,14 +30,14 @@ describe("Testing getUsers", () => {
         name: "Fulano",
         email: "fulano@email.com",
         createdAt: expect.any(String),
-        role: USER_ROLES.NORMAL
+        role: USER_ROLES.NORMAL,
       },
       {
         id: "id-mock-astrodev",
         name: "Astrodev",
         email: "astrodev@email.com",
         createdAt: expect.any(String),
-        role: USER_ROLES.ADMIN
+        role: USER_ROLES.ADMIN,
       },
     ]);
   });
@@ -67,16 +67,16 @@ describe("Testing getUsers", () => {
     });
   });
 
-  test("should return the message 'only admins can access this feature'", async () => {
-    expect.assertions(1);
+  test("should return the message 'Valid token but not enough permissions'", async () => {
     try {
+      expect.assertions(1);
       const input = GetUsersSchema.parse({
-        token: "id-mock-fulano",
+        token: "token-mock-fulano",
       });
       await userBusiness.getUsers(input);
     } catch (error) {
-      if (error instanceof UnauthorizedError) {
-        expect(error.message).toEqual("only admins can access this feature");
+      if (error instanceof ForbiddenError) {
+        expect(error.message).toBe("Valid token but not enough permissions");
       }
     }
   });
@@ -84,12 +84,12 @@ describe("Testing getUsers", () => {
   test("should return the message 'invalid token'", async () => {
     try {
       const input = GetUsersSchema.parse({
-        token: "token-mock-incorrect",
+        token: "token-fail",
       });
       const output = await userBusiness.getUsers(input);
     } catch (error) {
       expect(error instanceof BaseError).toBe(true);
-      if (error instanceof BadRequestError) {
+      if (error instanceof UnauthorizedError) {
         expect(error.message).toBe("invalid token");
       }
     }

@@ -34,13 +34,13 @@ describe("Testing editPost", () => {
       };
       const result = await postBusiness.editPost(input);
     } catch (error) {
-      if (error instanceof ForbiddenError) {
-        expect(error.message).toEqual("Valid token but not enough permissions");
+      if (error instanceof UnauthorizedError) {
+        expect(error.message).toEqual("invalid token");
       }
     }
   });
 
-  test("Edit post, should return 'access denied'", async () => {
+  test("Edit post, should return 'Valid token but not enough permissions'", async () => {
     expect.assertions(1);
     try {
       const input = {
@@ -50,8 +50,8 @@ describe("Testing editPost", () => {
       };
       const result = await postBusiness.editPost(input);
     } catch (error) {
-      if (error instanceof UnauthorizedError) {
-        expect(error.message).toEqual("Access denied");
+      if (error instanceof ForbiddenError) {
+        expect(error.message).toEqual("Valid token but not enough permissions");
       }
     }
   });

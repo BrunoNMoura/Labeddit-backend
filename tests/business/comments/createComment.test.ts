@@ -4,6 +4,7 @@ import { CommentDataBaseMock } from "../../mocks/CommentDataBase.Mock";
 import { CommentBusiness } from "../../../src/business/CommentBusiness";
 import { BadRequestError } from "../../../src/errors/BadRequestError";
 import { NotFoundError } from "../../../src/errors/NotFoundError";
+import { UnauthorizedError } from "../../../src/errors/UnauthorizedError";
 
 describe("Testing createComment", () => {
   const commentBusiness = new CommentBusiness(
@@ -33,7 +34,7 @@ describe("Testing createComment", () => {
       };
       await commentBusiness.createComment(input);
     } catch (error) {
-      if (error instanceof BadRequestError) {
+      if (error instanceof UnauthorizedError) {
         expect(error.message).toEqual("invalid token");
       }
     }
