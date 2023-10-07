@@ -1,23 +1,29 @@
-import express from 'express'
-import cors from 'cors'
-import dotenv from 'dotenv'
-import { userRouter } from './router/userRouter'
-import { postRouter } from './router/postRouter'
-import { commentRouter } from './router/commentRouter'
-import { likeDislikeRouter } from './router/likeDislikeRouter'
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import { userRouter } from './router/userRouter';
+import { postRouter } from './router/postRouter';
+import { commentRouter } from './router/commentRouter';
+import { likeDislikeRouter } from './router/likeDislikeRouter';
 
-dotenv.config()
+dotenv.config();
 
-const app = express()
+const app = express();
 
-app.use(cors())
-app.use(express.json())
+const corsOptions = {
+  origin: 'http://localhost:5173',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
+};
 
-app.listen(Number(process.env.PORT|| 3003), () => {
-    console.log(`Server running on port ${process.env.PORT}`)
+app.use(cors(corsOptions));
+app.use(express.json());
+
+app.listen(Number(process.env.PORT || 3003), () => {
+    console.log(`Server running on port ${process.env.PORT}`);
 })
 
-app.use("/users", userRouter)
-app.use("/posts", postRouter)
-app.use("/comments", commentRouter)
-app.use("/likes", likeDislikeRouter)
+app.use("/users", userRouter);
+app.use("/posts", postRouter);
+app.use("/comments", commentRouter);
+app.use("/likes", likeDislikeRouter);
