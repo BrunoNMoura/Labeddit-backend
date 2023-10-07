@@ -39,6 +39,7 @@ console.log(output);
         email: req.body.email,
         password: req.body.password,
       });
+      console.log(input);
 
       const output = await this.userBusiness.signUp(input);
 
@@ -61,6 +62,8 @@ console.log(output);
         email: req.body.email,
         password: req.body.password,
       });
+
+      console.log("Received login request with data:", input);
 
       const output = await this.userBusiness.login(input);
 
