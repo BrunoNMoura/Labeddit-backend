@@ -397,7 +397,7 @@ yarn start
 [View Postman-Labeddit-Backend](https://documenter.getpostman.com/view/26570541/2s9YJdV2PL)
 
 ## 💻 Front-end
-[Front-end repository link]()
+[Front-end repository link](https://github.com/BrunoNMoura/Labeddit-frontend)
 
 ## 🏆 Developer
 ![BrunoMoura](./assets/Bruno.jpg)
